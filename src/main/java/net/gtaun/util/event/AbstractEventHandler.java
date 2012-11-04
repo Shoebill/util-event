@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 MK124
+ * Copyright (C) 2011-2012 MK124
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.gtaun.util.event;
 
 import java.lang.reflect.Method;
@@ -23,11 +22,11 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
+ * 
+ * 
  * @author MK124
- *
  */
-
-public abstract class AbstractEventListener implements EventListener
+public abstract class AbstractEventHandler implements EventHandler
 {
 	private static final Map< Class<?>, Map<Class<?>, Method> > CLASSES_EVENT_METHOD_MAP = new WeakHashMap<>();
 	
@@ -55,7 +54,7 @@ public abstract class AbstractEventListener implements EventListener
 	private Map<Class<?>, Method> eventMethodMap;
 	
 	
-	protected AbstractEventListener( Class<?> cls )
+	protected AbstractEventHandler( Class<?> cls )
 	{
 		if( ! cls.isInstance( this ) ) throw new IllegalArgumentException();
 		

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 MK124
+ * Copyright (C) 2011-2012 MK124
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package net.gtaun.util.event.event;
 
-package net.gtaun.util.event;
+import net.gtaun.util.event.AbstractEventHandler;
 
 /**
+ * 
+ * 
  * @author MK124
- *
  */
-
-public interface EventListener
+public abstract class EventManagerEventHandler extends AbstractEventHandler
 {
-	void handleEvent( Event event );
+	protected EventManagerEventHandler()
+	{
+		super( EventManagerEventHandler.class );
+	}
+	
+	public void onEventHandlerAdded( EventHandlerAddedEvent event )
+	{
+		
+	}
+	
+	public void onEventHandlerRemoved( EventHandlerRemovedEvent event )
+	{
+		
+	}
 }

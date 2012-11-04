@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 MK124
+ * Copyright (C) 2011-2012 MK124
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.gtaun.util.event.event;
 
 import net.gtaun.util.event.Event;
-import net.gtaun.util.event.EventListener;
-import net.gtaun.util.event.IEventManager.Entry;
+import net.gtaun.util.event.EventHandler;
+import net.gtaun.util.event.EventManager.Entry;
 
 /**
+ * 
+ * 
  * @author MK124
- *
  */
-
-public class EventListenerEvent extends Event
+public class EventManagerEvent extends Event
 {
 	private Entry entry;
 	
 	
-	public EventListenerEvent( Entry entry )
+	public EventManagerEvent( Entry entry )
 	{
 		this.entry = entry;
 	}
@@ -55,9 +54,9 @@ public class EventListenerEvent extends Event
 		return entry.getRelatedClass();
 	}
 	
-	public EventListener getListener()
+	public EventHandler getHandler()
 	{
-		return entry.getListener();
+		return entry.getHandler();
 	}
 	
 	public short getPriority()

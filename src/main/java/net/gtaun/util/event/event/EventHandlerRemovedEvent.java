@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 MK124
+ * Copyright (C) 2011-2012 MK124
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.gtaun.util.event.event;
 
-import net.gtaun.util.event.IEventManager.Entry;
+import net.gtaun.util.event.EventManager.Entry;
 
 /**
+ * 
+ * 
  * @author MK124
- *
  */
-
-public class EventListenerRemovedEvent extends EventListenerEvent
+public class EventHandlerRemovedEvent extends EventManagerEvent
 {
-	public EventListenerRemovedEvent( Entry entry )
+	public EventHandlerRemovedEvent( Entry entry )
 	{
 		super( entry );
 	}

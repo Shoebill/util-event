@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 MK124
+ * Copyright (C) 2011-2012 MK124
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,53 +13,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.gtaun.util.event;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import net.gtaun.util.event.event.EventListenerEventListener;
-import net.gtaun.util.event.event.EventListenerRemovedEvent;
+import net.gtaun.util.event.event.EventManagerEventHandler;
+import net.gtaun.util.event.event.EventHandlerRemovedEvent;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
+ * 
+ * 
  * @author MK124
- *
  */
-
-public class ManagedEventManager implements IEventManager
+public class ManagedEventManager implements EventManager
 {
-	private IEventManager eventManager;
-	private EventListenerEventListener eventListenerEventListener;
-	private Entry eventListenerEventListenerEntry;
-	private Set<Entry> managedListeners;
+	private EventManager eventManager;
+	private EventManagerEventHandler eventManagerEventHandler;
+	private Entry eventManagerEventHandlerEntry;
+	private Set<Entry> managedHandlers;
 	
 	
-	public ManagedEventManager( IEventManager eventManager )
+	public ManagedEventManager( EventManager eventManager )
 	{
 		this.eventManager = eventManager;
-		managedListeners = new HashSet<>();
-		eventListenerEventListener = new EventListenerEventListener()
+		managedHandlers = new HashSet<>();
+		eventManagerEventHandler = new EventManagerEventHandler()
 		{
 			@Override
-			public void onEvnetListenerRemoved( EventListenerRemovedEvent event )
+			public void onEventHandlerRemoved( EventHandlerRemovedEvent event )
 			{
 				Entry entry = event.getEntry();
-				if( managedListeners.contains(entry) ) managedListeners.remove( entry );
+				if( managedHandlers.contains(entry) ) managedHandlers.remove( entry );
 			}
 		};
 		
-		eventListenerEventListenerEntry = eventManager.addListener( EventListenerRemovedEvent.class, eventListenerEventListener, Priority.MONITOR );
+		eventManagerEventHandlerEntry = eventManager.addHandler( EventHandlerRemovedEvent.class, eventManagerEventHandler, Priority.MONITOR );
 	}
 	
 	@Override
 	protected void finalize() throws Throwable
 	{
 		super.finalize();
-		eventManager.removeListener( eventListenerEventListenerEntry );
+		eventManager.removeHandler( eventManagerEventHandlerEntry );
 	}
 
 	@Override
@@ -68,125 +67,125 @@ public class ManagedEventManager implements IEventManager
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
 	}
 	
-	private void addListenerEntry( Entry entry )
+	private void addHandlerEntry( Entry entry )
 	{
-		managedListeners.add( entry );
+		managedHandlers.add( entry );
 	}
 	
-	public void removeAllListener()
+	public void removeAllHandler()
 	{
-		for( Entry entry : managedListeners ) removeListener( entry );
+		for( Entry entry : managedHandlers ) removeHandler( entry );
 	}
 	
 	
 	@Override
-	public Entry addListener( Class<? extends Event> type, EventListener listener, Priority priority )
+	public Entry addHandler( Class<? extends Event> type, EventHandler handler, Priority priority )
 	{
-		Entry entry = eventManager.addListener( type, listener, priority );
-		addListenerEntry( entry );
+		Entry entry = eventManager.addHandler( type, handler, priority );
+		addHandlerEntry( entry );
 		return entry;
 	}
 
 	@Override
-	public Entry addListener( Class<? extends Event> type, EventListener listener, short priority )
+	public Entry addHandler( Class<? extends Event> type, EventHandler handler, short priority )
 	{
-		Entry entry = eventManager.addListener( type, listener, priority );
-		addListenerEntry( entry );
+		Entry entry = eventManager.addHandler( type, handler, priority );
+		addHandlerEntry( entry );
 		return entry;
 	}
 
 	@Override
-	public Entry addListener( Class<? extends Event> type, Class<?> clz, EventListener listener, Priority priority )
+	public Entry addHandler( Class<? extends Event> type, Class<?> clz, EventHandler handler, Priority priority )
 	{
-		Entry entry = eventManager.addListener( type, clz, listener, priority );
-		addListenerEntry( entry );
+		Entry entry = eventManager.addHandler( type, clz, handler, priority );
+		addHandlerEntry( entry );
 		return entry;
 	}
 
 	@Override
-	public Entry addListener( Class<? extends Event> type, Class<?> clz, EventListener listener, short priority )
+	public Entry addHandler( Class<? extends Event> type, Class<?> clz, EventHandler handler, short priority )
 	{
-		Entry entry = eventManager.addListener( type, clz, listener, priority );
-		addListenerEntry( entry );
+		Entry entry = eventManager.addHandler( type, clz, handler, priority );
+		addHandlerEntry( entry );
 		return entry;
 	}
 
 	@Override
-	public Entry addListener( Class<? extends Event> type, Object object, EventListener listener, Priority priority )
+	public Entry addHandler( Class<? extends Event> type, Object object, EventHandler handler, Priority priority )
 	{
-		Entry entry = eventManager.addListener( type, object, listener, priority );
-		addListenerEntry( entry );
+		Entry entry = eventManager.addHandler( type, object, handler, priority );
+		addHandlerEntry( entry );
 		return entry;
 	}
 
 	@Override
-	public Entry addListener( Class<? extends Event> type, Object object, EventListener listener, short priority )
+	public Entry addHandler( Class<? extends Event> type, Object object, EventHandler handler, short priority )
 	{
-		Entry entry = eventManager.addListener( type, object, listener, priority );
-		addListenerEntry( entry );
+		Entry entry = eventManager.addHandler( type, object, handler, priority );
+		addHandlerEntry( entry );
 		return entry;
 	}
 	
 	@Override
-	public Entry addListener( Entry entry )
+	public Entry addHandler( Entry entry )
 	{
-		Entry ret = eventManager.addListener(entry);
-		addListenerEntry( ret );
+		Entry ret = eventManager.addHandler(entry);
+		addHandlerEntry( ret );
 		return ret;
 	}
 
 	@Override
-	public void removeListener( Class<? extends Event> type, EventListener listener )
+	public void removeHandler( Class<? extends Event> type, EventHandler handler )
 	{
-		eventManager.removeListener( type, listener );
+		eventManager.removeHandler( type, handler );
 	}
 
 	@Override
-	public void removeListener( Class<? extends Event> type, Class<?> clz, EventListener listener )
+	public void removeHandler( Class<? extends Event> type, Class<?> clz, EventHandler handler )
 	{
-		eventManager.removeListener( type, clz, listener );
+		eventManager.removeHandler( type, clz, handler );
 	}
 
 	@Override
-	public void removeListener( Class<? extends Event> type, Object object, EventListener listener )
+	public void removeHandler( Class<? extends Event> type, Object object, EventHandler handler )
 	{
-		eventManager.removeListener( type, object, listener );
+		eventManager.removeHandler( type, object, handler );
 	}
 	
 	@Override
-	public void removeListener( Entry entry )
+	public void removeHandler( Entry entry )
 	{
-		eventManager.removeListener( entry );
+		eventManager.removeHandler( entry );
 	}
 
 	@Override
-	public boolean hasListener( Class<? extends Event> type, Class<?> clz )
+	public boolean hasHandler( Class<? extends Event> type, Class<?> clz )
 	{
-		return eventManager.hasListener( type, clz );
+		return eventManager.hasHandler( type, clz );
 	}
 
 	@Override
-	public boolean hasListener( Class<? extends Event> type, Class<?> clz, EventListener listener )
+	public boolean hasHandler( Class<? extends Event> type, Class<?> clz, EventHandler handler )
 	{
-		return eventManager.hasListener( type, clz, listener );
+		return eventManager.hasHandler( type, clz, handler );
 	}
 
 	@Override
-	public boolean hasListener( Class<? extends Event> type, Object object )
+	public boolean hasHandler( Class<? extends Event> type, Object object )
 	{
-		return eventManager.hasListener( type, object );
+		return eventManager.hasHandler( type, object );
 	}
 
 	@Override
-	public boolean hasListener( Class<? extends Event> type, Object object, EventListener listener )
+	public boolean hasHandler( Class<? extends Event> type, Object object, EventHandler handler )
 	{
-		return eventManager.hasListener( type, object, listener );
+		return eventManager.hasHandler( type, object, handler );
 	}
 	
 	@Override
-	public boolean hasListener( Entry entry )
+	public boolean hasHandler( Entry entry )
 	{
-		return eventManager.hasListener( entry );
+		return eventManager.hasHandler( entry );
 	}
 
 	@Override
