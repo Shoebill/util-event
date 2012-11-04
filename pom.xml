@@ -63,7 +63,7 @@
 			<version>4.10</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -97,6 +97,9 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
+						<configuration>
+							<locale>en_US</locale>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
