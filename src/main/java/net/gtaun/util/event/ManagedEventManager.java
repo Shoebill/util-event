@@ -125,14 +125,6 @@ public class ManagedEventManager implements EventManager
 		addHandlerEntry( entry );
 		return entry;
 	}
-	
-	@Override
-	public Entry addHandler( Entry entry )
-	{
-		Entry ret = eventManager.addHandler(entry);
-		addHandlerEntry( ret );
-		return ret;
-	}
 
 	@Override
 	public void removeHandler( Class<? extends Event> type, EventHandler handler )
@@ -158,6 +150,12 @@ public class ManagedEventManager implements EventManager
 		eventManager.removeHandler( entry );
 	}
 
+	@Override
+	public boolean hasHandler(Class<? extends Event> type, EventHandler handler)
+	{
+		return eventManager.hasHandler(type, handler);
+	}
+	
 	@Override
 	public boolean hasHandler( Class<? extends Event> type, Class<?> clz )
 	{
@@ -192,5 +190,11 @@ public class ManagedEventManager implements EventManager
 	public <T extends Event> void dispatchEvent( T event, Object... objects )
 	{
 		eventManager.dispatchEvent( event, objects );
+	}
+
+	@Override
+	public <T extends Event> void dispatchEvent(ThrowableHandler handler, T event, Object... objects)
+	{
+		eventManager.dispatchEvent(handler, event, objects);
 	}
 }

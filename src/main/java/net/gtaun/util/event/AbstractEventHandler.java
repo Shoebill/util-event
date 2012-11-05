@@ -15,6 +15,7 @@
  */
 package net.gtaun.util.event;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -28,11 +29,11 @@ import java.util.WeakHashMap;
  */
 public abstract class AbstractEventHandler implements EventHandler
 {
-	private static final Map< Class<?>, Map<Class<?>, Method> > CLASSES_EVENT_METHOD_MAP = new WeakHashMap<>();
+	private static final Map< Class<?>, Map<Class<?>, Method> > CLASSES_EVENT_METHOD_MAP = new WeakHashMap<Class<?>, Map<Class<?>, Method>>();
 	
 	private static Map<Class<?>, Method> generateEventMethodMap( Class<?> cls )
 	{
-		Map<Class<?>, Method> eventMethodMap = new HashMap<>();
+		Map<Class<?>, Method> eventMethodMap = new HashMap<Class<?>, Method>();
 		Method[] methods = cls.getDeclaredMethods();
 		
 		for( Method method : methods )
@@ -42,7 +43,8 @@ public abstract class AbstractEventHandler implements EventHandler
 			
 			Class<?>[] paramTypes = method.getParameterTypes();
 			if( paramTypes.length != 1 ) continue;
-			if( ! Event.class.isAssignableFrom( paramTypes[0] ) ) continue;
+			if( Event.class == paramTypes[0] ) continue;
+			if( !Event.class.isAssignableFrom(paramTypes[0]) ) continue;
 			
 			eventMethodMap.put( paramTypes[0], method );
 		}
@@ -56,7 +58,7 @@ public abstract class AbstractEventHandler implements EventHandler
 	
 	protected AbstractEventHandler( Class<?> cls )
 	{
-		if( ! cls.isInstance( this ) ) throw new IllegalArgumentException();
+		if( cls == AbstractEventHandler.class || !AbstractEventHandler.class.isAssignableFrom(cls) ) throw new IllegalArgumentException();
 		
 		eventMethodMap = CLASSES_EVENT_METHOD_MAP.get(cls);
 		if( eventMethodMap == null )
@@ -67,7 +69,7 @@ public abstract class AbstractEventHandler implements EventHandler
 	}
 	
 	@Override
-	public void handleEvent( Event event )
+	public void handleEvent( Event event ) throws Throwable
 	{
 		Method method = eventMethodMap.get( event.getClass() );
 		if( method == null ) return;
@@ -76,9 +78,9 @@ public abstract class AbstractEventHandler implements EventHandler
 		{
 			method.invoke( this, event );
 		}
-		catch( Exception e )
+		catch( InvocationTargetException e )
 		{
-			e.printStackTrace();
+			throw e.getTargetException();
 		}
 	}
 }

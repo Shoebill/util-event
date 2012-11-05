@@ -74,6 +74,10 @@ public interface EventManager
 		}
 	}
 	
+	public static interface ThrowableHandler
+	{
+		void handleThrowable( Throwable throwable );
+	}
 	public enum Priority
 	{
 		BOTTOM		( (short) -32768 ),
@@ -98,25 +102,25 @@ public interface EventManager
 		}
 	}
 	
-	
 	Entry addHandler( Class<? extends Event> type, EventHandler handler, Priority priority );
 	Entry addHandler( Class<? extends Event> type, EventHandler handler, short priority );
 	Entry addHandler( Class<? extends Event> type, Class<?> clz, EventHandler handler, Priority priority );
 	Entry addHandler( Class<? extends Event> type, Class<?> clz, EventHandler handler, short priority );
 	Entry addHandler( Class<? extends Event> type, Object object, EventHandler handler, Priority priority );
 	Entry addHandler( Class<? extends Event> type, Object object, EventHandler handler, short priority );
-	Entry addHandler( Entry entry );
-
+	
 	void removeHandler( Class<? extends Event> type, EventHandler handler );
 	void removeHandler( Class<? extends Event> type, Class<?> clz, EventHandler handler );
 	void removeHandler( Class<? extends Event> type, Object object, EventHandler handler );
 	void removeHandler( Entry entry );
 
+	boolean hasHandler( Class<? extends Event> type, EventHandler handler );
 	boolean hasHandler( Class<? extends Event> type, Class<?> clz );
 	boolean hasHandler( Class<? extends Event> type, Class<?> clz, EventHandler handler );
 	boolean hasHandler( Class<? extends Event> type, Object object );
 	boolean hasHandler( Class<? extends Event> type, Object object, EventHandler handler );
 	boolean hasHandler( Entry entry );
 	
-	<T extends Event> void dispatchEvent( T event, Object ...relatedObjects );
+	<T extends Event> void dispatchEvent( T event, Object ...objects );
+	<T extends Event> void dispatchEvent( ThrowableHandler handler, T event, Object ...objects );
 }

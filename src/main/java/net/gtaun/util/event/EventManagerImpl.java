@@ -27,9 +27,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import net.gtaun.util.event.event.EventHandlerAddedEvent;
 import net.gtaun.util.event.event.EventHandlerRemovedEvent;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 /**
  * 
  * 
@@ -37,18 +34,22 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class EventManagerImpl implements EventManager
 {
+	private static final ThrowableHandler DEFAULT_THROWABLE_HANDLER = new ThrowableHandler()
+	{
+		@Override
+		public void handleThrowable( Throwable throwable )
+		{
+			throwable.printStackTrace(); 
+		}
+	};
+	
+	
 	private Map<Class<? extends Event>, Map<Object, Queue<Entry>>> handlerEntryContainersMap;
 	
 	
 	public EventManagerImpl()
 	{
 		handlerEntryContainersMap = new ConcurrentHashMap<Class<? extends Event>, Map<Object, Queue<Entry>>>();
-	}
-
-	@Override
-	public String toString()
-	{
-		return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
 	}
 
 	@Override
@@ -85,28 +86,27 @@ public class EventManagerImpl implements EventManager
 	public Entry addHandler( Class<? extends Event> type, Object relatedObject, EventHandler handler, short customPriority )
 	{
 		Entry entry = new Entry( type, relatedObject, handler, customPriority );
-		return addHandler(entry);
+		return addHandlerEntry(entry);
 	}
 	
-	@Override
-	public Entry addHandler( Entry entry )
+	private Entry addHandlerEntry( Entry entry )
 	{
 		Class<? extends Event> type = entry.getType();
 		Object relatedObject = entry.getRelatedObject();
 		EventHandler handler = entry.getHandler();
 		
-		Map<Object, Queue<Entry>> objectHandlerEntries = handlerEntryContainersMap.get(type);
-		if( objectHandlerEntries == null )
+		Map<Object, Queue<Entry>> objectListenerEntries = handlerEntryContainersMap.get(type);
+		if( objectListenerEntries == null )
 		{
-			objectHandlerEntries = new ConcurrentHashMap<>();
-			handlerEntryContainersMap.put( type, objectHandlerEntries );
+			objectListenerEntries = new ConcurrentHashMap<Object, Queue<Entry>>();
+			handlerEntryContainersMap.put( type, objectListenerEntries );
 		}
 		
-		Queue<Entry> entries = objectHandlerEntries.get(relatedObject);
+		Queue<Entry> entries = objectListenerEntries.get(relatedObject);
 		if( entries == null )
 		{
-			entries = new ConcurrentLinkedQueue<>();
-			objectHandlerEntries.put( relatedObject, entries );
+			entries = new ConcurrentLinkedQueue<Entry>();
+			objectListenerEntries.put( relatedObject, entries );
 		}
 		
 		for( Entry e : entries )
@@ -139,35 +139,31 @@ public class EventManagerImpl implements EventManager
 	@Override
 	public void removeHandler( Class<? extends Event> type, Object relatedObject, EventHandler handler )
 	{
-		Map<Object, Queue<Entry>> objectHandlerEntries = handlerEntryContainersMap.get(type);
-		if( objectHandlerEntries == null ) return;
+		Map<Object, Queue<Entry>> objectEventHandlerEntries = handlerEntryContainersMap.get(type);
+		if( objectEventHandlerEntries == null ) return;
 		
-		Queue<Entry> entries = objectHandlerEntries.get(relatedObject);
+		Queue<Entry> entries = objectEventHandlerEntries.get(relatedObject);
 		if( entries == null ) return;
 		
 		for( Entry entry : entries )
 		{
 			if( entry.getHandler() != handler ) continue;
-			entries.remove( entry );
-			
-			EventHandlerRemovedEvent event = new EventHandlerRemovedEvent(entry);
-			dispatchEvent( event, this );
+			removeHandler( entry );
 		}
-		
-		if( entries.size() == 0 ) objectHandlerEntries.remove( relatedObject );
-		if( objectHandlerEntries.size() == 0 ) handlerEntryContainersMap.remove( type );
 	}
 	
 	@Override
 	public void removeHandler( Entry entry )
 	{
+		if( entry == null ) return;
+		
 		Class<? extends Event> type = entry.getType();
 		Object relatedObject = entry.getRelatedObject();
 		
-		Map<Object, Queue<Entry>> objectHandlerEntries = handlerEntryContainersMap.get(type);
-		if( objectHandlerEntries == null ) return;
+		Map<Object, Queue<Entry>> objectEventHandlerEntries = handlerEntryContainersMap.get(type);
+		if( objectEventHandlerEntries == null ) return;
 		
-		Queue<Entry> entries = objectHandlerEntries.get(relatedObject);
+		Queue<Entry> entries = objectEventHandlerEntries.get(relatedObject);
 		if( entries == null ) return;
 		
 		for( Entry e : entries )
@@ -180,10 +176,15 @@ public class EventManagerImpl implements EventManager
 			break;
 		}
 		
-		if( entries.size() == 0 ) objectHandlerEntries.remove( relatedObject );
-		if( objectHandlerEntries.size() == 0 ) handlerEntryContainersMap.remove( type );
+		if( entries.size() == 0 ) objectEventHandlerEntries.remove( relatedObject );
+		if( objectEventHandlerEntries.size() == 0 ) handlerEntryContainersMap.remove( type );
 	}
 	
+	@Override
+	public boolean hasHandler( Class<? extends Event> type, EventHandler handler )
+	{
+		return hasHandler( type, Object.class, handler );
+	}
 
 	@Override
 	public boolean hasHandler( Class<? extends Event> type, Class<?> clz )
@@ -200,10 +201,10 @@ public class EventManagerImpl implements EventManager
 	@Override
 	public boolean hasHandler( Class<? extends Event> type, Object object )
 	{
-		Map<Object, Queue<Entry>> objectHandlerEntries = handlerEntryContainersMap.get(type);
-		if( objectHandlerEntries == null ) return false;
+		Map<Object, Queue<Entry>> objectEventHandlerEntries = handlerEntryContainersMap.get(type);
+		if( objectEventHandlerEntries == null ) return false;
 		
-		Queue<Entry> entries = objectHandlerEntries.get(object);
+		Queue<Entry> entries = objectEventHandlerEntries.get(object);
 		if( entries == null ) return false;
 		
 		return true;
@@ -212,10 +213,10 @@ public class EventManagerImpl implements EventManager
 	@Override
 	public boolean hasHandler( Class<? extends Event> type, Object object, EventHandler handler )
 	{
-		Map<Object, Queue<Entry>> objectHandlerEntries = handlerEntryContainersMap.get(type);
-		if( objectHandlerEntries == null ) return false;
+		Map<Object, Queue<Entry>> objectListenerEntries = handlerEntryContainersMap.get(type);
+		if( objectListenerEntries == null ) return false;
 		
-		Queue<Entry> entries = objectHandlerEntries.get(object);
+		Queue<Entry> entries = objectListenerEntries.get(object);
 		if( entries == null ) return false;
 		
 		for( Entry entry : entries )
@@ -229,13 +230,15 @@ public class EventManagerImpl implements EventManager
 	@Override
 	public boolean hasHandler( Entry entry )
 	{
+		if( entry == null ) return false;
+		
 		Class<? extends Event> type = entry.getType();
 		Object relatedObject = entry.getRelatedObject();
 		
-		Map<Object, Queue<Entry>> objectHandlerEntries = handlerEntryContainersMap.get(type);
-		if( objectHandlerEntries == null ) return false;
+		Map<Object, Queue<Entry>> objectEventHandlerEntries = handlerEntryContainersMap.get(type);
+		if( objectEventHandlerEntries == null ) return false;
 		
-		Queue<Entry> entries = objectHandlerEntries.get(relatedObject);
+		Queue<Entry> entries = objectEventHandlerEntries.get(relatedObject);
 		if( entries == null ) return false;
 		
 		for( Entry e : entries )
@@ -250,10 +253,17 @@ public class EventManagerImpl implements EventManager
 	@Override
 	public <T extends Event> void dispatchEvent( T event, Object ...objects )
 	{
-		if( objects.length == 1 && objects[0] instanceof Object[] ) objects = (Object[]) objects[0];
+		dispatchEvent( null, event, objects );
+	}
+
+	@Override
+	public <T extends Event> void dispatchEvent( ThrowableHandler throwableHandler, T event, Object ...objects )
+	{
+		if( throwableHandler == null ) throwableHandler = DEFAULT_THROWABLE_HANDLER;
+		if( objects.length == 0 ) objects = new Object[] { new Object() };
 		
 		Class<? extends Event> type = event.getClass();
-		PriorityQueue<Entry> handlerEntryQueue = new PriorityQueue<>( 16,
+		PriorityQueue<Entry> handlerEntryQueue = new PriorityQueue<Entry>( 16,
 			new Comparator<Entry>()
 			{
 				@Override
@@ -264,14 +274,14 @@ public class EventManagerImpl implements EventManager
 			}
 		);
 		
-		Map<Object, Queue<Entry>> objectHandlerEntries = handlerEntryContainersMap.get(type);
-		if( objectHandlerEntries == null ) return;
+		Map<Object, Queue<Entry>> objectEventHandlerEntries = handlerEntryContainersMap.get(type);
+		if( objectEventHandlerEntries == null ) return;
 		
 		for( Object object : objects )
 		{
 			Class<?> cls = object.getClass();
 			
-			Queue<Entry> entries = objectHandlerEntries.get( object );
+			Queue<Entry> entries = objectEventHandlerEntries.get( object );
 			if( entries != null ) for( Entry entry : entries )
 			{
 				if( entry.getHandler() == null ) entries.remove( entry );
@@ -281,8 +291,8 @@ public class EventManagerImpl implements EventManager
 			Class<?>[] interfaces = cls.getInterfaces();
 			for( Class<?> clz : interfaces )
 			{
-				Queue<Entry> classHandlerEntries = objectHandlerEntries.get( clz );
-				if( classHandlerEntries != null ) for( Entry entry : classHandlerEntries )
+				Queue<Entry> classEventHandlerEntries = objectEventHandlerEntries.get( clz );
+				if( classEventHandlerEntries != null ) for( Entry entry : classEventHandlerEntries )
 				{
 					if( entry.getHandler() == null ) entries.remove( entry );
 					else handlerEntryQueue.add( entry );
@@ -291,8 +301,8 @@ public class EventManagerImpl implements EventManager
 			
 			for( Class<?> clz = cls; clz != null; clz = clz.getSuperclass() )
 			{
-				Queue<Entry> classHandlerEntries = objectHandlerEntries.get( clz );
-				if( classHandlerEntries != null ) for( Entry entry : classHandlerEntries )
+				Queue<Entry> classEventHandlerEntries = objectEventHandlerEntries.get( clz );
+				if( classEventHandlerEntries != null ) for( Entry entry : classEventHandlerEntries )
 				{
 					if( entry.getHandler() == null ) entries.remove( entry );
 					else handlerEntryQueue.add( entry );
@@ -300,7 +310,7 @@ public class EventManagerImpl implements EventManager
 			}
 		}
 		
-		Set<Entry> processedHandler = new HashSet<>( handlerEntryQueue.size() );
+		Set<Entry> processedHandler = new HashSet<Entry>( handlerEntryQueue.size() );
 		while( handlerEntryQueue.isEmpty() == false && event.isInterrupted() == false )
 		{
 			Entry entry = handlerEntryQueue.poll();
@@ -308,16 +318,20 @@ public class EventManagerImpl implements EventManager
 			
 			if( handler == null ) continue;
 			
-			if( processedHandler.contains(entry) ) return;
+			if( processedHandler.contains(entry) ) continue;
 			processedHandler.add( entry );
 			
 			try
 			{
 				handler.handleEvent( event );
 			}
-			catch( Exception e )
+			catch( AssertionError e )
 			{
-				e.printStackTrace();
+				throw e;
+			}
+			catch( Throwable e )
+			{
+				throwableHandler.handleThrowable( e );
 			}
 		}
 	}

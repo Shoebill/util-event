@@ -22,5 +22,5 @@ package net.gtaun.util.event;
  */
 public interface EventHandler
 {
-	void handleEvent( Event event );
+	void handleEvent( Event event ) throws Throwable;
 }
