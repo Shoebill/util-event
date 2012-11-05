@@ -10,9 +10,9 @@ import java.util.Queue;
 
 import net.gtaun.util.event.EventManager.Entry;
 import net.gtaun.util.event.EventManager.Priority;
-import net.gtaun.util.event.event.EventHandlerAddedEvent;
-import net.gtaun.util.event.event.EventHandlerRemovedEvent;
-import net.gtaun.util.event.event.EventManagerEventHandler;
+import net.gtaun.util.event.events.EventHandlerAddedEvent;
+import net.gtaun.util.event.events.EventHandlerRemovedEvent;
+import net.gtaun.util.event.events.EventManagerEventHandler;
 import net.gtaun.util.event.events.UselessEvent;
 import net.gtaun.util.event.events.UselessEventHandler;
 

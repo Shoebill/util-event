@@ -13,19 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.gtaun.util.event.event;
+package net.gtaun.util.event.events;
 
-import net.gtaun.util.event.EventManager.Entry;
+import net.gtaun.util.event.AbstractEventHandler;
 
 /**
  * 
  * 
  * @author MK124
  */
-public class EventHandlerRemovedEvent extends EventManagerEvent
+public abstract class EventManagerEventHandler extends AbstractEventHandler
 {
-	public EventHandlerRemovedEvent( Entry entry )
+	protected EventManagerEventHandler()
 	{
-		super( entry );
+		super( EventManagerEventHandler.class );
+	}
+	
+	public void onEventHandlerAdded( EventHandlerAddedEvent event )
+	{
+		
+	}
+	
+	public void onEventHandlerRemoved( EventHandlerRemovedEvent event )
+	{
+		
 	}
 }

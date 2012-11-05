@@ -18,8 +18,8 @@ package net.gtaun.util.event;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.gtaun.util.event.event.EventManagerEventHandler;
-import net.gtaun.util.event.event.EventHandlerRemovedEvent;
+import net.gtaun.util.event.events.EventHandlerRemovedEvent;
+import net.gtaun.util.event.events.EventManagerEventHandler;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

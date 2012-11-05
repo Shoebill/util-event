@@ -24,8 +24,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import net.gtaun.util.event.event.EventHandlerAddedEvent;
-import net.gtaun.util.event.event.EventHandlerRemovedEvent;
+import net.gtaun.util.event.events.EventHandlerAddedEvent;
+import net.gtaun.util.event.events.EventHandlerRemovedEvent;
 
 /**
  * 
