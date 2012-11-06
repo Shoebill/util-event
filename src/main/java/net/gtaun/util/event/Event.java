@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.gtaun.util.event;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -34,7 +35,7 @@ public abstract class Event
 		this.interruptable = true;
 	}
 	
-	protected Event( boolean interruptable )
+	protected Event(boolean interruptable)
 	{
 		this.interruptable = interruptable;
 	}

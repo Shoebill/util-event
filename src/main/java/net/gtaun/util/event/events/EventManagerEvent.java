@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.gtaun.util.event.events;
 
 import net.gtaun.util.event.Event;
@@ -29,16 +30,16 @@ public class EventManagerEvent extends Event
 	private Entry entry;
 	
 	
-	public EventManagerEvent( Entry entry )
+	public EventManagerEvent(Entry entry)
 	{
 		this.entry = entry;
 	}
-
+	
 	public Entry getEntry()
 	{
 		return entry;
 	}
-
+	
 	public Class<? extends Event> getType()
 	{
 		return entry.getType();

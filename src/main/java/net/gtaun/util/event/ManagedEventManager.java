@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.gtaun.util.event;
 
 import java.util.HashSet;
@@ -37,119 +38,118 @@ public class ManagedEventManager implements EventManager
 	private Set<Entry> managedHandlers;
 	
 	
-	public ManagedEventManager( EventManager eventManager )
+	public ManagedEventManager(EventManager eventManager)
 	{
 		this.eventManager = eventManager;
 		managedHandlers = new HashSet<>();
 		eventManagerEventHandler = new EventManagerEventHandler()
 		{
 			@Override
-			public void onEventHandlerRemoved( EventHandlerRemovedEvent event )
+			public void onEventHandlerRemoved(EventHandlerRemovedEvent event)
 			{
 				Entry entry = event.getEntry();
-				if( managedHandlers.contains(entry) ) managedHandlers.remove( entry );
+				if (managedHandlers.contains(entry)) managedHandlers.remove(entry);
 			}
 		};
 		
-		eventManagerEventHandlerEntry = eventManager.addHandler( EventHandlerRemovedEvent.class, eventManagerEventHandler, Priority.MONITOR );
+		eventManagerEventHandlerEntry = eventManager.addHandler(EventHandlerRemovedEvent.class, eventManagerEventHandler, Priority.MONITOR);
 	}
 	
 	@Override
 	protected void finalize() throws Throwable
 	{
 		super.finalize();
-		eventManager.removeHandler( eventManagerEventHandlerEntry );
+		eventManager.removeHandler(eventManagerEventHandlerEntry);
 	}
-
+	
 	@Override
 	public String toString()
 	{
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
 	}
 	
-	private void addHandlerEntry( Entry entry )
+	private void addHandlerEntry(Entry entry)
 	{
-		managedHandlers.add( entry );
+		managedHandlers.add(entry);
 	}
 	
 	public void removeAllHandler()
 	{
-		for( Entry entry : managedHandlers ) removeHandler( entry );
-	}
-	
-	
-	@Override
-	public Entry addHandler( Class<? extends Event> type, EventHandler handler, Priority priority )
-	{
-		Entry entry = eventManager.addHandler( type, handler, priority );
-		addHandlerEntry( entry );
-		return entry;
-	}
-
-	@Override
-	public Entry addHandler( Class<? extends Event> type, EventHandler handler, short priority )
-	{
-		Entry entry = eventManager.addHandler( type, handler, priority );
-		addHandlerEntry( entry );
-		return entry;
-	}
-
-	@Override
-	public Entry addHandler( Class<? extends Event> type, Class<?> clz, EventHandler handler, Priority priority )
-	{
-		Entry entry = eventManager.addHandler( type, clz, handler, priority );
-		addHandlerEntry( entry );
-		return entry;
-	}
-
-	@Override
-	public Entry addHandler( Class<? extends Event> type, Class<?> clz, EventHandler handler, short priority )
-	{
-		Entry entry = eventManager.addHandler( type, clz, handler, priority );
-		addHandlerEntry( entry );
-		return entry;
-	}
-
-	@Override
-	public Entry addHandler( Class<? extends Event> type, Object object, EventHandler handler, Priority priority )
-	{
-		Entry entry = eventManager.addHandler( type, object, handler, priority );
-		addHandlerEntry( entry );
-		return entry;
-	}
-
-	@Override
-	public Entry addHandler( Class<? extends Event> type, Object object, EventHandler handler, short priority )
-	{
-		Entry entry = eventManager.addHandler( type, object, handler, priority );
-		addHandlerEntry( entry );
-		return entry;
-	}
-
-	@Override
-	public void removeHandler( Class<? extends Event> type, EventHandler handler )
-	{
-		eventManager.removeHandler( type, handler );
-	}
-
-	@Override
-	public void removeHandler( Class<? extends Event> type, Class<?> clz, EventHandler handler )
-	{
-		eventManager.removeHandler( type, clz, handler );
-	}
-
-	@Override
-	public void removeHandler( Class<? extends Event> type, Object object, EventHandler handler )
-	{
-		eventManager.removeHandler( type, object, handler );
+		for (Entry entry : managedHandlers) removeHandler(entry);
 	}
 	
 	@Override
-	public void removeHandler( Entry entry )
+	public Entry addHandler(Class<? extends Event> type, EventHandler handler, Priority priority)
 	{
-		eventManager.removeHandler( entry );
+		Entry entry = eventManager.addHandler(type, handler, priority);
+		addHandlerEntry(entry);
+		return entry;
 	}
-
+	
+	@Override
+	public Entry addHandler(Class<? extends Event> type, EventHandler handler, short priority)
+	{
+		Entry entry = eventManager.addHandler(type, handler, priority);
+		addHandlerEntry(entry);
+		return entry;
+	}
+	
+	@Override
+	public Entry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, Priority priority)
+	{
+		Entry entry = eventManager.addHandler(type, clz, handler, priority);
+		addHandlerEntry(entry);
+		return entry;
+	}
+	
+	@Override
+	public Entry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, short priority)
+	{
+		Entry entry = eventManager.addHandler(type, clz, handler, priority);
+		addHandlerEntry(entry);
+		return entry;
+	}
+	
+	@Override
+	public Entry addHandler(Class<? extends Event> type, Object object, EventHandler handler, Priority priority)
+	{
+		Entry entry = eventManager.addHandler(type, object, handler, priority);
+		addHandlerEntry(entry);
+		return entry;
+	}
+	
+	@Override
+	public Entry addHandler(Class<? extends Event> type, Object object, EventHandler handler, short priority)
+	{
+		Entry entry = eventManager.addHandler(type, object, handler, priority);
+		addHandlerEntry(entry);
+		return entry;
+	}
+	
+	@Override
+	public void removeHandler(Class<? extends Event> type, EventHandler handler)
+	{
+		eventManager.removeHandler(type, handler);
+	}
+	
+	@Override
+	public void removeHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler)
+	{
+		eventManager.removeHandler(type, clz, handler);
+	}
+	
+	@Override
+	public void removeHandler(Class<? extends Event> type, Object object, EventHandler handler)
+	{
+		eventManager.removeHandler(type, object, handler);
+	}
+	
+	@Override
+	public void removeHandler(Entry entry)
+	{
+		eventManager.removeHandler(entry);
+	}
+	
 	@Override
 	public boolean hasHandler(Class<? extends Event> type, EventHandler handler)
 	{
@@ -157,41 +157,41 @@ public class ManagedEventManager implements EventManager
 	}
 	
 	@Override
-	public boolean hasHandler( Class<? extends Event> type, Class<?> clz )
+	public boolean hasHandler(Class<? extends Event> type, Class<?> clz)
 	{
-		return eventManager.hasHandler( type, clz );
-	}
-
-	@Override
-	public boolean hasHandler( Class<? extends Event> type, Class<?> clz, EventHandler handler )
-	{
-		return eventManager.hasHandler( type, clz, handler );
-	}
-
-	@Override
-	public boolean hasHandler( Class<? extends Event> type, Object object )
-	{
-		return eventManager.hasHandler( type, object );
-	}
-
-	@Override
-	public boolean hasHandler( Class<? extends Event> type, Object object, EventHandler handler )
-	{
-		return eventManager.hasHandler( type, object, handler );
+		return eventManager.hasHandler(type, clz);
 	}
 	
 	@Override
-	public boolean hasHandler( Entry entry )
+	public boolean hasHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler)
 	{
-		return eventManager.hasHandler( entry );
+		return eventManager.hasHandler(type, clz, handler);
 	}
-
+	
 	@Override
-	public <T extends Event> void dispatchEvent( T event, Object... objects )
+	public boolean hasHandler(Class<? extends Event> type, Object object)
 	{
-		eventManager.dispatchEvent( event, objects );
+		return eventManager.hasHandler(type, object);
 	}
-
+	
+	@Override
+	public boolean hasHandler(Class<? extends Event> type, Object object, EventHandler handler)
+	{
+		return eventManager.hasHandler(type, object, handler);
+	}
+	
+	@Override
+	public boolean hasHandler(Entry entry)
+	{
+		return eventManager.hasHandler(entry);
+	}
+	
+	@Override
+	public <T extends Event> void dispatchEvent(T event, Object... objects)
+	{
+		eventManager.dispatchEvent(event, objects);
+	}
+	
 	@Override
 	public <T extends Event> void dispatchEvent(ThrowableHandler handler, T event, Object... objects)
 	{

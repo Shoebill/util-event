@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.gtaun.util.event.events;
 
 import net.gtaun.util.event.EventManager.Entry;
@@ -24,8 +25,8 @@ import net.gtaun.util.event.EventManager.Entry;
  */
 public class EventHandlerAddedEvent extends EventManagerEvent
 {
-	public EventHandlerAddedEvent( Entry entry )
+	public EventHandlerAddedEvent(Entry entry)
 	{
-		super( entry );
+		super(entry);
 	}
 }

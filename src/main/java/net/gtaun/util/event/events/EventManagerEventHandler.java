@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.gtaun.util.event.events;
 
 import net.gtaun.util.event.AbstractEventHandler;
@@ -26,15 +27,15 @@ public abstract class EventManagerEventHandler extends AbstractEventHandler
 {
 	protected EventManagerEventHandler()
 	{
-		super( EventManagerEventHandler.class );
+		super(EventManagerEventHandler.class);
 	}
 	
-	public void onEventHandlerAdded( EventHandlerAddedEvent event )
+	public void onEventHandlerAdded(EventHandlerAddedEvent event)
 	{
 		
 	}
 	
-	public void onEventHandlerRemoved( EventHandlerRemovedEvent event )
+	public void onEventHandlerRemoved(EventHandlerRemovedEvent event)
 	{
 		
 	}
