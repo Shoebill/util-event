@@ -16,9 +16,6 @@
 
 package net.gtaun.util.event;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 /**
  * 
  * 
@@ -26,53 +23,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public interface EventManager
 {
-	public static class Entry
+	public interface HandlerEntry
 	{
-		private Class<? extends Event> type;
-		private Object relatedObject;
-		private EventHandler handler;
-		private short priority;
-		
-		
-		public Entry(Class<? extends Event> type, Object relatedObject, EventHandler handler, short priority)
-		{
-			this.type = type;
-			this.relatedObject = relatedObject;
-			this.handler = handler;
-			this.priority = priority;
-		}
-		
-		@Override
-		public String toString()
-		{
-			return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
-		}
-		
-		public Class<? extends Event> getType()
-		{
-			return type;
-		}
-		
-		public Object getRelatedObject()
-		{
-			return relatedObject;
-		}
-		
-		public Class<?> getRelatedClass()
-		{
-			if (relatedObject instanceof Class) return (Class<?>) relatedObject;
-			return null;
-		}
-		
-		public EventHandler getHandler()
-		{
-			return handler;
-		}
-		
-		public short getPriority()
-		{
-			return priority;
-		}
+		public EventManager getEventManager();
+		public Class<? extends Event> getType();
+		public Object getRelatedObject();
+		public Class<?> getRelatedClass();
+		public EventHandler getHandler();
+		public short getPriority();
 	}
 	
 	public static interface ThrowableHandler
@@ -80,7 +38,7 @@ public interface EventManager
 		void handleThrowable(Throwable throwable);
 	}
 	
-	public enum Priority
+	public enum EventHandlerPriority
 	{
 		BOTTOM((short) -32768),
 		LOWEST((short) -16384),
@@ -93,7 +51,7 @@ public interface EventManager
 		private final short value;
 		
 		
-		private Priority(short value)
+		private EventHandlerPriority(short value)
 		{
 			this.value = value;
 		}
@@ -105,24 +63,24 @@ public interface EventManager
 	}
 	
 	
-	Entry addHandler(Class<? extends Event> type, EventHandler handler, Priority priority);
-	Entry addHandler(Class<? extends Event> type, EventHandler handler, short priority);
-	Entry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, Priority priority);
-	Entry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, short priority);
-	Entry addHandler(Class<? extends Event> type, Object object, EventHandler handler, Priority priority);
-	Entry addHandler(Class<? extends Event> type, Object object, EventHandler handler, short priority);
+	HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, EventHandlerPriority priority);
+	HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, short priority);
+	HandlerEntry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, EventHandlerPriority priority);
+	HandlerEntry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, short priority);
+	HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, EventHandlerPriority priority);
+	HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, short priority);
 	
 	void removeHandler(Class<? extends Event> type, EventHandler handler);
 	void removeHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler);
 	void removeHandler(Class<? extends Event> type, Object object, EventHandler handler);
-	void removeHandler(Entry entry);
+	void removeHandler(HandlerEntry entry);
 	
 	boolean hasHandler(Class<? extends Event> type, EventHandler handler);
 	boolean hasHandler(Class<? extends Event> type, Class<?> clz);
 	boolean hasHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler);
 	boolean hasHandler(Class<? extends Event> type, Object object);
 	boolean hasHandler(Class<? extends Event> type, Object object, EventHandler handler);
-	boolean hasHandler(Entry entry);
+	boolean hasHandler(HandlerEntry entry);
 	
 	<T extends Event> void dispatchEvent(T event, Object... objects);
 	<T extends Event> void dispatchEvent(ThrowableHandler handler, T event, Object... objects);

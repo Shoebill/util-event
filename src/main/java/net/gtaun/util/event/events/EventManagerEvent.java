@@ -18,7 +18,7 @@ package net.gtaun.util.event.events;
 
 import net.gtaun.util.event.Event;
 import net.gtaun.util.event.EventHandler;
-import net.gtaun.util.event.EventManager.Entry;
+import net.gtaun.util.event.EventManager.HandlerEntry;
 
 /**
  * 
@@ -27,15 +27,15 @@ import net.gtaun.util.event.EventManager.Entry;
  */
 public class EventManagerEvent extends Event
 {
-	private Entry entry;
+	private HandlerEntry entry;
 	
 	
-	public EventManagerEvent(Entry entry)
+	public EventManagerEvent(HandlerEntry entry)
 	{
 		this.entry = entry;
 	}
 	
-	public Entry getEntry()
+	public HandlerEntry getEntry()
 	{
 		return entry;
 	}

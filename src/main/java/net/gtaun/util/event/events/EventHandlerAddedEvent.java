@@ -16,7 +16,7 @@
 
 package net.gtaun.util.event.events;
 
-import net.gtaun.util.event.EventManager.Entry;
+import net.gtaun.util.event.EventManager.HandlerEntry;
 
 /**
  * 
@@ -25,7 +25,7 @@ import net.gtaun.util.event.EventManager.Entry;
  */
 public class EventHandlerAddedEvent extends EventManagerEvent
 {
-	public EventHandlerAddedEvent(Entry entry)
+	public EventHandlerAddedEvent(HandlerEntry entry)
 	{
 		super(entry);
 	}

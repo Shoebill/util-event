@@ -8,8 +8,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import net.gtaun.util.event.EventManager.Entry;
-import net.gtaun.util.event.EventManager.Priority;
+import net.gtaun.util.event.EventManager.HandlerEntry;
+import net.gtaun.util.event.EventManager.EventHandlerPriority;
 import net.gtaun.util.event.EventManager.ThrowableHandler;
 import net.gtaun.util.event.events.InterruptableEvent;
 import net.gtaun.util.event.events.UselessEvent;
@@ -53,7 +53,7 @@ public class EventManagerTest
 			}
 		};
 		
-		eventManager.addHandler(UselessEvent.class, handler, Priority.NORMAL);
+		eventManager.addHandler(UselessEvent.class, handler, EventHandlerPriority.NORMAL);
 		
 		UselessEvent event = new UselessEvent();
 		eventManager.dispatchEvent(event);
@@ -75,7 +75,7 @@ public class EventManagerTest
 			}
 		};
 		
-		eventManager.addHandler(InterruptableEvent.class, this, handler, Priority.NORMAL);
+		eventManager.addHandler(InterruptableEvent.class, this, handler, EventHandlerPriority.NORMAL);
 		
 		InterruptableEvent event = new InterruptableEvent();
 		eventManager.dispatchEvent(event, this);
@@ -99,7 +99,7 @@ public class EventManagerTest
 			}
 		};
 		
-		eventManager.addHandler(InterruptableEvent.class, EventManagerTest.class, handler, Priority.NORMAL);
+		eventManager.addHandler(InterruptableEvent.class, EventManagerTest.class, handler, EventHandlerPriority.NORMAL);
 		
 		InterruptableEvent event = new InterruptableEvent();
 		eventManager.dispatchEvent(event, this);
@@ -127,7 +127,7 @@ public class EventManagerTest
 		{
 		};
 		
-		eventManager.addHandler(InterruptableEvent.class, Cloneable.class, handler, Priority.NORMAL);
+		eventManager.addHandler(InterruptableEvent.class, Cloneable.class, handler, EventHandlerPriority.NORMAL);
 		
 		InterruptableEvent event = new InterruptableEvent();
 		eventManager.dispatchEvent(event, cloneable);
@@ -144,17 +144,17 @@ public class EventManagerTest
 		{
 		};
 		
-		eventManager.addHandler(UselessEvent.class, handler, Priority.NORMAL);
+		eventManager.addHandler(UselessEvent.class, handler, EventHandlerPriority.NORMAL);
 		assertTrue(eventManager.hasHandler(UselessEvent.class, handler));
 		eventManager.removeHandler(UselessEvent.class, handler);
 		assertFalse(eventManager.hasHandler(UselessEvent.class, handler));
 		
-		eventManager.addHandler(UselessEvent.class, this, handler, Priority.NORMAL);
+		eventManager.addHandler(UselessEvent.class, this, handler, EventHandlerPriority.NORMAL);
 		assertTrue(eventManager.hasHandler(UselessEvent.class, this, handler));
 		eventManager.removeHandler(UselessEvent.class, this, handler);
 		assertFalse(eventManager.hasHandler(UselessEvent.class, this, handler));
 		
-		eventManager.addHandler(UselessEvent.class, EventManagerTest.class, handler, Priority.NORMAL);
+		eventManager.addHandler(UselessEvent.class, EventManagerTest.class, handler, EventHandlerPriority.NORMAL);
 		assertTrue(eventManager.hasHandler(UselessEvent.class, EventManagerTest.class, handler));
 		eventManager.removeHandler(UselessEvent.class, EventManagerTest.class, handler);
 		assertFalse(eventManager.hasHandler(UselessEvent.class, EventManagerTest.class, handler));
@@ -172,7 +172,7 @@ public class EventManagerTest
 			}
 		};
 		
-		eventManager.addHandler(UselessEvent.class, handler, Priority.NORMAL);
+		eventManager.addHandler(UselessEvent.class, handler, EventHandlerPriority.NORMAL);
 		eventManager.removeHandler(UselessEvent.class, handler);
 		
 		UselessEvent event = new UselessEvent();
@@ -205,8 +205,8 @@ public class EventManagerTest
 			}
 		};
 
-		eventManager.addHandler(InterruptableEvent.class, handler, Priority.NORMAL);
-		eventManager.addHandler(InterruptableEvent.class, handler2, Priority.NORMAL);
+		eventManager.addHandler(InterruptableEvent.class, handler, EventHandlerPriority.NORMAL);
+		eventManager.addHandler(InterruptableEvent.class, handler2, EventHandlerPriority.NORMAL);
 		
 		InterruptableEvent event = new InterruptableEvent();
 		eventManager.dispatchEvent(event);
@@ -224,7 +224,7 @@ public class EventManagerTest
 		
 		assertFalse(eventManager.hasHandler(UselessEvent.class, handler));
 		
-		Entry entry = eventManager.addHandler(UselessEvent.class, handler, Priority.NORMAL);
+		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, handler, EventHandlerPriority.NORMAL);
 		
 		assertTrue(eventManager.hasHandler(entry));
 		assertTrue(eventManager.hasHandler(UselessEvent.class, handler));
@@ -245,7 +245,7 @@ public class EventManagerTest
 		
 		assertFalse(eventManager.hasHandler(UselessEvent.class, EventManagerTest.class, handler));
 		
-		Entry entry = eventManager.addHandler(UselessEvent.class, EventManagerTest.class, handler, Priority.NORMAL);
+		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, EventManagerTest.class, handler, EventHandlerPriority.NORMAL);
 		
 		assertTrue(eventManager.hasHandler(entry));
 		assertFalse(eventManager.hasHandler(UselessEvent.class, handler));
@@ -266,7 +266,7 @@ public class EventManagerTest
 		
 		assertFalse(eventManager.hasHandler(UselessEvent.class, this, handler));
 		
-		Entry entry = eventManager.addHandler(UselessEvent.class, this, handler, Priority.NORMAL);
+		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, this, handler, EventHandlerPriority.NORMAL);
 		
 		assertTrue(eventManager.hasHandler(entry));
 		assertFalse(eventManager.hasHandler(UselessEvent.class, handler));
@@ -302,7 +302,7 @@ public class EventManagerTest
 			}
 		};
 		
-		eventManager.addHandler(UselessEvent.class, handler, Priority.NORMAL);
+		eventManager.addHandler(UselessEvent.class, handler, EventHandlerPriority.NORMAL);
 		eventManager.dispatchEvent(throwableHandler, new UselessEvent());
 		
 		assertSame(exception, queue.poll());

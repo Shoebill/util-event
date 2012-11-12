@@ -2,8 +2,8 @@ package net.gtaun.util.event;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import net.gtaun.util.event.EventManager.Entry;
-import net.gtaun.util.event.EventManager.Priority;
+import net.gtaun.util.event.EventManager.HandlerEntry;
+import net.gtaun.util.event.EventManager.EventHandlerPriority;
 import net.gtaun.util.event.events.UselessEvent;
 import net.gtaun.util.event.events.UselessEventHandler;
 
@@ -40,12 +40,12 @@ public class EntryTest
 		{
 		};
 		
-		Entry entry = eventManager.addHandler(UselessEvent.class, EntryTest.class, handler, Priority.LOWEST);
+		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, EntryTest.class, handler, EventHandlerPriority.LOWEST);
 
 		assertSame(UselessEvent.class, entry.getType());
 		assertSame(EntryTest.class, entry.getRelatedObject());
 		assertSame(EntryTest.class, entry.getRelatedClass());
 		assertSame(handler, entry.getHandler());
-		assertEquals(Priority.LOWEST.getValue(), entry.getPriority());
+		assertEquals(EventHandlerPriority.LOWEST.getValue(), entry.getPriority());
 	}
 }
