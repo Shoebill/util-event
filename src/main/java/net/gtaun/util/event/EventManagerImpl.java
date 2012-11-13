@@ -123,7 +123,7 @@ public class EventManagerImpl implements EventManager
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, EventHandlerPriority priority)
+	public HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, HandlerPriority priority)
 	{
 		return addHandler(type, Object.class, handler, priority.getValue());
 	}
@@ -135,7 +135,7 @@ public class EventManagerImpl implements EventManager
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, Class<?> relatedClass, EventHandler handler, EventHandlerPriority priority)
+	public HandlerEntry addHandler(Class<? extends Event> type, Class<?> relatedClass, EventHandler handler, HandlerPriority priority)
 	{
 		return addHandler(type, (Object) relatedClass, handler, priority.getValue());
 	}
@@ -147,7 +147,7 @@ public class EventManagerImpl implements EventManager
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, Object relatedObject, EventHandler handler, EventHandlerPriority priority)
+	public HandlerEntry addHandler(Class<? extends Event> type, Object relatedObject, EventHandler handler, HandlerPriority priority)
 	{
 		return addHandler(type, relatedObject, handler, priority.getValue());
 	}

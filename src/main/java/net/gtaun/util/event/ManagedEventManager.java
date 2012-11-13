@@ -19,7 +19,6 @@ package net.gtaun.util.event;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -56,7 +55,7 @@ public class ManagedEventManager implements EventManager
 			}
 		};
 		
-		eventManagerEventHandlerEntry = eventManager.addHandler(EventHandlerRemovedEvent.class, eventManagerEventHandler, EventHandlerPriority.MONITOR);
+		eventManagerEventHandlerEntry = eventManager.addHandler(EventHandlerRemovedEvent.class, eventManagerEventHandler, HandlerPriority.MONITOR);
 	}
 	
 	@Override
@@ -93,7 +92,7 @@ public class ManagedEventManager implements EventManager
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, EventHandlerPriority priority)
+	public HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, HandlerPriority priority)
 	{
 		HandlerEntry entry = eventManager.addHandler(type, handler, priority);
 		addHandlerEntry(entry);
@@ -109,7 +108,7 @@ public class ManagedEventManager implements EventManager
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, EventHandlerPriority priority)
+	public HandlerEntry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, HandlerPriority priority)
 	{
 		HandlerEntry entry = eventManager.addHandler(type, clz, handler, priority);
 		addHandlerEntry(entry);
@@ -125,7 +124,7 @@ public class ManagedEventManager implements EventManager
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, EventHandlerPriority priority)
+	public HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, HandlerPriority priority)
 	{
 		HandlerEntry entry = eventManager.addHandler(type, object, handler, priority);
 		addHandlerEntry(entry);

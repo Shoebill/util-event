@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import net.gtaun.util.event.EventManager.HandlerEntry;
-import net.gtaun.util.event.EventManager.EventHandlerPriority;
+import net.gtaun.util.event.EventManager.HandlerPriority;
 import net.gtaun.util.event.events.EventHandlerAddedEvent;
 import net.gtaun.util.event.events.EventHandlerRemovedEvent;
 import net.gtaun.util.event.events.EventManagerEventHandler;
@@ -66,10 +66,10 @@ public class EventManagerEventTest
 			}
 		};
 
-		HandlerEntry addedHandlerEntry = eventManager.addHandler(EventHandlerAddedEvent.class, managerEventHandler, EventHandlerPriority.NORMAL);
-		HandlerEntry removedHandlerEntry = eventManager.addHandler(EventHandlerRemovedEvent.class, managerEventHandler, EventHandlerPriority.NORMAL);
+		HandlerEntry addedHandlerEntry = eventManager.addHandler(EventHandlerAddedEvent.class, managerEventHandler, HandlerPriority.NORMAL);
+		HandlerEntry removedHandlerEntry = eventManager.addHandler(EventHandlerRemovedEvent.class, managerEventHandler, HandlerPriority.NORMAL);
 
-		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, handler, EventHandlerPriority.NORMAL);
+		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
 		entry.cancel();
 		
 		addedHandlerEntry.cancel();
@@ -97,8 +97,8 @@ public class EventManagerEventTest
 			}
 		};
 
-		HandlerEntry addedHandlerEntry = eventManager.addHandler(EventHandlerAddedEvent.class, eventManager, managerEventHandler, EventHandlerPriority.NORMAL);
-		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, this, handler, EventHandlerPriority.HIGHEST);
+		HandlerEntry addedHandlerEntry = eventManager.addHandler(EventHandlerAddedEvent.class, eventManager, managerEventHandler, HandlerPriority.NORMAL);
+		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, this, handler, HandlerPriority.HIGHEST);
 		
 		entry.cancel();
 		addedHandlerEntry.cancel();
@@ -110,7 +110,7 @@ public class EventManagerEventTest
 		assertSame(UselessEvent.class, event.getType());
 		assertSame(this, event.getRelatedObject());
 		assertSame(handler, event.getHandler());
-		assertEquals(EventHandlerPriority.HIGHEST.getValue(), event.getPriority());
+		assertEquals(HandlerPriority.HIGHEST.getValue(), event.getPriority());
 		assertNull(event.getRelatedClass());
 		assertSame(entry, event.getEntry());
 	}

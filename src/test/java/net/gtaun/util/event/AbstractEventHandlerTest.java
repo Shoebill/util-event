@@ -3,7 +3,7 @@ package net.gtaun.util.event;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import net.gtaun.util.event.EventManager.EventHandlerPriority;
+import net.gtaun.util.event.EventManager.HandlerPriority;
 import net.gtaun.util.event.events.UselessEvent;
 
 import org.junit.After;
@@ -101,7 +101,7 @@ public class AbstractEventHandlerTest
 		
 		AbstractEventHandler handler = new Handler();
 		
-		eventManager.addHandler(UselessEvent.class, handler, EventHandlerPriority.NORMAL);
+		eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
 		
 		UselessEvent event = new UselessEvent();
 		eventManager.dispatchEvent(event);
@@ -128,7 +128,7 @@ public class AbstractEventHandlerTest
 		
 		AbstractEventHandler handler = new Handler();
 		
-		eventManager.addHandler(UselessEvent.class, handler, EventHandlerPriority.NORMAL);
+		eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
 		
 		UselessEvent event = new UselessEvent();
 		eventManager.dispatchEvent(event);
@@ -161,7 +161,7 @@ public class AbstractEventHandlerTest
 		
 		AbstractEventHandler handler = new Handler();
 		
-		eventManager.addHandler(UselessEvent.class, handler, EventHandlerPriority.NORMAL);
+		eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
 		
 		UselessEvent event = new UselessEvent();
 		eventManager.dispatchEvent(event);
@@ -194,7 +194,7 @@ public class AbstractEventHandlerTest
 		
 		AbstractEventHandler handler = new Handler();
 		
-		eventManager.addHandler(UselessEvent.class, handler, EventHandlerPriority.NORMAL);
+		eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
 		
 		UselessEvent event = new UselessEvent();
 		eventManager.dispatchEvent(event);

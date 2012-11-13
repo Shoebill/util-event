@@ -40,7 +40,7 @@ public interface EventManager
 		void handleThrowable(Throwable throwable);
 	}
 	
-	public enum EventHandlerPriority
+	public enum HandlerPriority
 	{
 		BOTTOM((short) -32768),
 		LOWEST((short) -16384),
@@ -53,7 +53,7 @@ public interface EventManager
 		private final short value;
 		
 		
-		private EventHandlerPriority(short value)
+		private HandlerPriority(short value)
 		{
 			this.value = value;
 		}
@@ -65,11 +65,11 @@ public interface EventManager
 	}
 	
 	
-	HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, EventHandlerPriority priority);
+	HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, HandlerPriority priority);
 	HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, short priority);
-	HandlerEntry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, EventHandlerPriority priority);
+	HandlerEntry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, HandlerPriority priority);
 	HandlerEntry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, short priority);
-	HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, EventHandlerPriority priority);
+	HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, HandlerPriority priority);
 	HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, short priority);
 	
 	boolean hasHandler(Class<? extends Event> type, EventHandler handler);
