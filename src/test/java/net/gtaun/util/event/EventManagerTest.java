@@ -213,7 +213,6 @@ public class EventManagerTest
 		InterruptableEvent event = new InterruptableEvent();
 		eventManager.dispatchEvent(event);
 		
-		assertTrue(event.isInterruptable());
 		assertTrue(counter.getTaps() == 1);
 	}
 

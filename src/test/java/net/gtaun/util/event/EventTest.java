@@ -3,6 +3,8 @@ package net.gtaun.util.event;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import net.gtaun.util.event.events.InterruptableEvent;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,27 +35,14 @@ public class EventTest
 		{
 		};
 		
-		assertTrue(event.isInterruptable());
 		assertFalse(event.isInterrupted());
 	}
 	
 	public void testInterrupt()
 	{
-		Event event = new Event()
-		{
-		};
+		InterruptableEvent event = new InterruptableEvent();
 		
-		assertTrue(event.interrupt());
+		event.interrupt();
 		assertTrue(event.isInterrupted());
-	}
-	
-	public void testInterrupt2()
-	{
-		Event event = new Event(false)
-		{
-		};
-		
-		assertFalse(event.interrupt());
-		assertFalse(event.isInterrupted());
 	}
 }

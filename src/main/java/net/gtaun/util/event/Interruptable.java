@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2012 MK124
+ * Copyright (C) 2012 MK124
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,37 +16,12 @@
 
 package net.gtaun.util.event;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 /**
  * 
  * 
  * @author MK124
  */
-public abstract class Event
+public interface Interruptable
 {
-	private boolean interrupted;
-	
-	
-	protected Event()
-	{
-		
-	}
-
-	@Override
-	public String toString()
-	{
-		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-	}
-	
-	protected boolean isInterrupted()
-	{
-		return interrupted;
-	}
-	
-	protected void interrupt()
-	{
-		interrupted = true;
-	}
+	void interrupt();
 }
