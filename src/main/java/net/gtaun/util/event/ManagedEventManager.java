@@ -60,7 +60,7 @@ public class ManagedEventManager implements EventManager
 	protected void finalize() throws Throwable
 	{
 		super.finalize();
-		eventManager.removeHandler(eventManagerEventHandlerEntry);
+		eventManagerEventHandlerEntry.cancel();
 	}
 	
 	@Override
@@ -80,9 +80,10 @@ public class ManagedEventManager implements EventManager
 		while(iterator.hasNext())
 		{
 			HandlerEntry entry = iterator.next();
-			eventManager.removeHandler(entry);
-			iterator.remove();
+			entry.cancel();
 		}
+		
+		managedHandlers.clear();
 	}
 	
 	@Override
@@ -134,30 +135,6 @@ public class ManagedEventManager implements EventManager
 	}
 	
 	@Override
-	public void removeHandler(Class<? extends Event> type, EventHandler handler)
-	{
-		eventManager.removeHandler(type, handler);
-	}
-	
-	@Override
-	public void removeHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler)
-	{
-		eventManager.removeHandler(type, clz, handler);
-	}
-	
-	@Override
-	public void removeHandler(Class<? extends Event> type, Object object, EventHandler handler)
-	{
-		eventManager.removeHandler(type, object, handler);
-	}
-	
-	@Override
-	public void removeHandler(HandlerEntry entry)
-	{
-		eventManager.removeHandler(entry);
-	}
-	
-	@Override
 	public boolean hasHandler(Class<? extends Event> type, EventHandler handler)
 	{
 		return eventManager.hasHandler(type, handler);
@@ -185,12 +162,6 @@ public class ManagedEventManager implements EventManager
 	public boolean hasHandler(Class<? extends Event> type, Object object, EventHandler handler)
 	{
 		return eventManager.hasHandler(type, object, handler);
-	}
-	
-	@Override
-	public boolean hasHandler(HandlerEntry entry)
-	{
-		return eventManager.hasHandler(entry);
 	}
 	
 	@Override

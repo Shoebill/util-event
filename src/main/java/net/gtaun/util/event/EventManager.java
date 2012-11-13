@@ -26,6 +26,8 @@ public interface EventManager
 	public interface HandlerEntry
 	{
 		public EventManager getEventManager();
+		public void cancel();
+		
 		public Class<? extends Event> getType();
 		public Object getRelatedObject();
 		public Class<?> getRelatedClass();
@@ -70,17 +72,11 @@ public interface EventManager
 	HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, EventHandlerPriority priority);
 	HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, short priority);
 	
-	void removeHandler(Class<? extends Event> type, EventHandler handler);
-	void removeHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler);
-	void removeHandler(Class<? extends Event> type, Object object, EventHandler handler);
-	void removeHandler(HandlerEntry entry);
-	
 	boolean hasHandler(Class<? extends Event> type, EventHandler handler);
 	boolean hasHandler(Class<? extends Event> type, Class<?> clz);
 	boolean hasHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler);
 	boolean hasHandler(Class<? extends Event> type, Object object);
 	boolean hasHandler(Class<? extends Event> type, Object object, EventHandler handler);
-	boolean hasHandler(HandlerEntry entry);
 	
 	<T extends Event> void dispatchEvent(T event, Object... objects);
 	<T extends Event> void dispatchEvent(ThrowableHandler handler, T event, Object... objects);

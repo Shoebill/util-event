@@ -66,12 +66,15 @@ public class EventManagerEventTest
 			}
 		};
 
-		eventManager.addHandler(EventHandlerAddedEvent.class, managerEventHandler, EventHandlerPriority.NORMAL);
-		eventManager.addHandler(EventHandlerRemovedEvent.class, managerEventHandler, EventHandlerPriority.NORMAL);
+		HandlerEntry addedHandlerEntry = eventManager.addHandler(EventHandlerAddedEvent.class, managerEventHandler, EventHandlerPriority.NORMAL);
+		HandlerEntry removedHandlerEntry = eventManager.addHandler(EventHandlerRemovedEvent.class, managerEventHandler, EventHandlerPriority.NORMAL);
 
-		eventManager.addHandler(UselessEvent.class, handler, EventHandlerPriority.NORMAL);
-		eventManager.removeHandler(UselessEvent.class, handler);
-
+		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, handler, EventHandlerPriority.NORMAL);
+		entry.cancel();
+		
+		addedHandlerEntry.cancel();
+		removedHandlerEntry.cancel();
+		
 		assertSame(EventHandlerAddedEvent.class, queue.poll().getClass());
 		assertSame(EventHandlerRemovedEvent.class, queue.poll().getClass());
 	}
@@ -94,12 +97,16 @@ public class EventManagerEventTest
 			}
 		};
 
-		eventManager.addHandler(EventHandlerAddedEvent.class, eventManager, managerEventHandler, EventHandlerPriority.NORMAL);
+		HandlerEntry addedHandlerEntry = eventManager.addHandler(EventHandlerAddedEvent.class, eventManager, managerEventHandler, EventHandlerPriority.NORMAL);
 		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, this, handler, EventHandlerPriority.HIGHEST);
+		
+		entry.cancel();
+		addedHandlerEntry.cancel();
 		
 		EventHandlerAddedEvent event = queue.poll();
 		assertNotNull(event);
 
+		assertSame(eventManager, event.getEventManager());
 		assertSame(UselessEvent.class, event.getType());
 		assertSame(this, event.getRelatedObject());
 		assertSame(handler, event.getHandler());
