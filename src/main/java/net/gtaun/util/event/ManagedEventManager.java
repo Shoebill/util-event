@@ -16,8 +16,11 @@
 
 package net.gtaun.util.event;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import net.gtaun.util.event.events.EventHandlerRemovedEvent;
@@ -42,14 +45,14 @@ public class ManagedEventManager implements EventManager
 	public ManagedEventManager(EventManager eventManager)
 	{
 		this.eventManager = eventManager;
-		managedHandlers = new HashSet<>();
+		managedHandlers = Collections.synchronizedSet(new HashSet<HandlerEntry>());
 		eventManagerEventHandler = new EventManagerEventHandler()
 		{
 			@Override
 			public void onEventHandlerRemoved(EventHandlerRemovedEvent event)
 			{
 				HandlerEntry entry = event.getEntry();
-				if (managedHandlers.contains(entry)) managedHandlers.remove(entry);
+				managedHandlers.remove(entry);
 			}
 		};
 		
@@ -66,20 +69,23 @@ public class ManagedEventManager implements EventManager
 	@Override
 	public String toString()
 	{
+		
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
 	}
 	
 	private void addHandlerEntry(HandlerEntry entry)
 	{
-		managedHandlers.add(entry);
+		synchronized (managedHandlers)
+		{
+			managedHandlers.add(entry);
+		}
 	}
 	
 	public void removeAllHandler()
 	{
-		Iterator<HandlerEntry> iterator = managedHandlers.iterator();
-		while(iterator.hasNext())
+		List<HandlerEntry> entries = new ArrayList<>(managedHandlers);
+		for(HandlerEntry entry : entries)
 		{
-			HandlerEntry entry = iterator.next();
 			entry.cancel();
 		}
 		
