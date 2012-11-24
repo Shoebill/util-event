@@ -20,7 +20,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * 
+ * The abstract class of event, should be inheritance for defining new event type.
  * 
  * @author MK124
  */
@@ -40,11 +40,21 @@ public abstract class Event
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 	
+	/**
+	 * Check whether the dispatch is interrupted or not.
+	 * 
+	 * @return If the dispatch is interrupted, return {@code true}
+	 */
 	protected boolean isInterrupted()
 	{
 		return interrupted;
 	}
 	
+	/**
+	 * Override this as a public method if it can be interrupted.
+	 * 
+	 * @see Interruptable
+	 */
 	protected void interrupt()
 	{
 		interrupted = true;

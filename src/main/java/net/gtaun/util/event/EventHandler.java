@@ -17,11 +17,17 @@
 package net.gtaun.util.event;
 
 /**
- * 
+ * Interface of event handler.
  * 
  * @author MK124
  */
 public interface EventHandler
 {
+	/**
+	 * Handle event.
+	 * 
+	 * @param event Instance of event.
+	 * @throws Throwable Exceptions that might be thrown.
+	 */
 	void handleEvent(Event event) throws Throwable;
 }

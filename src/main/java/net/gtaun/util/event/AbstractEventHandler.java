@@ -24,7 +24,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * 
+ * The abstract class of EventHandler, provide feature that handles the event dispatched with the right method.
+ * Find all event methods of class through reflect, and invokes when dealing the event.
  * 
  * @author MK124
  */

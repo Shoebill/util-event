@@ -17,11 +17,15 @@
 package net.gtaun.util.event;
 
 /**
- * 
+ * Interface of interruptable event.
+ * If you wish your event could be interrupted, please implements this interface.
  * 
  * @author MK124
  */
 public interface Interruptable
 {
+	/**
+	 * Dispatch the interrupt event.
+	 */
 	void interrupt();
 }

@@ -22,7 +22,7 @@ import net.gtaun.util.event.EventManager;
 import net.gtaun.util.event.EventManager.HandlerEntry;
 
 /**
- * 
+ * Base class of EventManager's event.
  * 
  * @author MK124
  */
@@ -41,6 +41,11 @@ public class EventManagerEvent extends Event
 		return entry.getEventManager();
 	}
 	
+	/**
+	 * Get the related event handler entry.
+	 * 
+	 * @return Entry of event handler
+	 */
 	public HandlerEntry getEntry()
 	{
 		return entry;

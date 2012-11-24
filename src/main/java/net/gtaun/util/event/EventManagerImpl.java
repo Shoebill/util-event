@@ -33,7 +33,7 @@ import net.gtaun.util.event.events.EventHandlerAddedEvent;
 import net.gtaun.util.event.events.EventHandlerRemovedEvent;
 
 /**
- * 
+ * Standard implementation class of event manager.
  * 
  * @author MK124
  */

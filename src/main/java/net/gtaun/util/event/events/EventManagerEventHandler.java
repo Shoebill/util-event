@@ -19,7 +19,7 @@ package net.gtaun.util.event.events;
 import net.gtaun.util.event.AbstractEventHandler;
 
 /**
- * 
+ * Base class of EventManager's EventHandler.
  * 
  * @author MK124
  */

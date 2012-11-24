@@ -19,7 +19,7 @@ package net.gtaun.util.event.events;
 import net.gtaun.util.event.EventManager.HandlerEntry;
 
 /**
- * 
+ * The event dispatch by event manager when adding event handler.
  * 
  * @author MK124
  */
