@@ -25,8 +25,8 @@ public interface EventManager
 {
 	/**
 	 * Interface of EventHandler entry that is registered. 
-	 * 用于获取事件处理者的详细信息以及取消处理。
-	 * 必须保存条目实例，否则将会被 GC 回收并取消事件处理。
+	 * Use for getting informations of handler and canceling event.
+	 * Keeping the reference of entry's instance is necessary, or it will be recycled by GC.
 	 */
 	public interface HandlerEntry
 	{
@@ -172,7 +172,7 @@ public interface EventManager
 	 * 
 	 * @param type Related event type
 	 * @param handler Instance of event handler
-	 * @param priority Self-defined priority of event handler
+	 * @param priority Custom priority of event handler
 	 *  
 	 * @return Entry of event handler
 	 *  
@@ -202,7 +202,7 @@ public interface EventManager
 	 * @param type Related event type
 	 * @param clz Related class
 	 * @param handler Instance of event handler
-	 * @param priority Self-defined priority of event handler
+	 * @param priority Custom priority of event handler
 	 *  
 	 * @return Entry of event handler
 	 *  
@@ -232,7 +232,7 @@ public interface EventManager
 	 * @param type Related event type
 	 * @param object Related instance
 	 * @param handler Instance of event handler
-	 * @param priority Self-defined priority of event handler
+	 * @param priority Custom priority of event handler
 	 *  
 	 * @return Entry of event handler
 	 *  
