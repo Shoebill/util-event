@@ -141,36 +141,6 @@ public class ManagedEventManager implements EventManager
 	}
 	
 	@Override
-	public boolean hasHandler(Class<? extends Event> type, EventHandler handler)
-	{
-		return eventManager.hasHandler(type, handler);
-	}
-	
-	@Override
-	public boolean hasHandler(Class<? extends Event> type, Class<?> clz)
-	{
-		return eventManager.hasHandler(type, clz);
-	}
-	
-	@Override
-	public boolean hasHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler)
-	{
-		return eventManager.hasHandler(type, clz, handler);
-	}
-	
-	@Override
-	public boolean hasHandler(Class<? extends Event> type, Object object)
-	{
-		return eventManager.hasHandler(type, object);
-	}
-	
-	@Override
-	public boolean hasHandler(Class<? extends Event> type, Object object, EventHandler handler)
-	{
-		return eventManager.hasHandler(type, object, handler);
-	}
-	
-	@Override
 	public <T extends Event> void dispatchEvent(T event, Object... objects)
 	{
 		eventManager.dispatchEvent(event, objects);

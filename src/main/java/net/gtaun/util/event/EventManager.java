@@ -241,58 +241,6 @@ public interface EventManager
 	HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, short priority);
 	
 	/**
-	 * Check whether it has handler of specified event handler instance.
-	 * 
-	 * @param type Event type to be checked
-	 * @param handler Handler instance to be checked
-	 *  
-	 * @return If it does have, return {@code true}
-	 */
-	boolean hasHandler(Class<? extends Event> type, EventHandler handler);
-	
-	/**
-	 * Check whether it has handler of specified related class.
-	 * 
-	 * @param type Event type to be checked
-	 * @param clz Related class
-	 *  
-	 * @return If it does have, return {@code true}
-	 */
-	boolean hasHandler(Class<? extends Event> type, Class<?> clz);
-	
-	/**
-	 * Check whether it has handler of specified related class and handler instance.
-	 * 
-	 * @param type Event type to be checked
-	 * @param clz Related class
-	 * @param handler Handler instance to be checked
-	 *  
-	 * @return If it does have, return {@code true}
-	 */
-	boolean hasHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler);
-	
-	/**
-	 * Check whether it has handler of specified related instance.
-	 * 
-	 * @param type Event type to be checked
-	 * @param object Related instance
-	 *  
-	 * @return If it does have, return {@code true}
-	 */
-	boolean hasHandler(Class<? extends Event> type, Object object);
-	
-	/**
-	 * Check whether it has handler of specified related instance and handler instance.
-	 * 
-	 * @param type Event type to be checked
-	 * @param object Related instance
-	 * @param handler Handler instance to be checked
-	 *  
-	 * @return If it does have, return {@code true}
-	 */
-	boolean hasHandler(Class<? extends Event> type, Object object, EventHandler handler);
-	
-	/**
 	 * Dispatch events according to handler's priority.
 	 * It might be interrupted if event allowed.
 	 * If the handler throw exception, it will be print out and keep dispatching.

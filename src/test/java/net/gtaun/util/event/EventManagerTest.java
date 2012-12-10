@@ -22,19 +22,19 @@ import org.junit.Test;
 public class EventManagerTest
 {
 	private EventManager eventManager;
-
-
+	
+	
 	public EventManagerTest()
 	{
 
 	}
-
+	
 	@Before
 	public void setUp() throws Exception
 	{
 		eventManager = new EventManagerImpl();
 	}
-
+	
 	@After
 	public void tearDown() throws Exception
 	{
@@ -60,7 +60,7 @@ public class EventManagerTest
 		
 		assertTrue(event.isProcessed());
 	}
-
+	
 	@Test
 	public void testAddHandlerAndDispatchEvent2()
 	{
@@ -84,7 +84,7 @@ public class EventManagerTest
 		
 		assertEquals(1, counter.getTaps());
 	}
-
+	
 	@Test
 	public void testAddHandlerAndDispatchEvent3()
 	{
@@ -135,31 +135,6 @@ public class EventManagerTest
 		eventManager.dispatchEvent(event);
 		
 		assertEquals(1, counter.getTaps());
-	}
-	
-	@Test
-	public void testHasAndRemoveEventHandler()
-	{
-		UselessEventHandler handler = new UselessEventHandler()
-		{
-		};
-		
-		HandlerEntry entry;
-		
-		entry = eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
-		assertTrue(eventManager.hasHandler(UselessEvent.class, handler));
-		entry.cancel();
-		assertFalse(eventManager.hasHandler(UselessEvent.class, handler));
-		
-		entry = eventManager.addHandler(UselessEvent.class, this, handler, HandlerPriority.NORMAL);
-		assertTrue(eventManager.hasHandler(UselessEvent.class, this, handler));
-		entry.cancel();
-		assertFalse(eventManager.hasHandler(UselessEvent.class, this, handler));
-		
-		entry = eventManager.addHandler(UselessEvent.class, EventManagerTest.class, handler, HandlerPriority.NORMAL);
-		assertTrue(eventManager.hasHandler(UselessEvent.class, EventManagerTest.class, handler));
-		entry.cancel();
-		assertFalse(eventManager.hasHandler(UselessEvent.class, EventManagerTest.class, handler));
 	}
 	
 	@Test
@@ -215,72 +190,6 @@ public class EventManagerTest
 		
 		assertTrue(counter.getTaps() == 1);
 	}
-
-	@Test
-	public void testHasGlobalHandler()
-	{
-		UselessEventHandler handler = new UselessEventHandler()
-		{
-		};
-		
-		assertFalse(eventManager.hasHandler(UselessEvent.class, handler));
-		
-		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
-		
-		assertTrue(eventManager.hasHandler(UselessEvent.class, handler));
-		assertTrue(eventManager.hasHandler(UselessEvent.class, Object.class));
-		assertTrue(eventManager.hasHandler(UselessEvent.class, Object.class, handler));
-		assertFalse(eventManager.hasHandler(UselessEvent.class, EventManagerTest.class));
-		assertFalse(eventManager.hasHandler(UselessEvent.class, EventManagerTest.class, handler));
-		assertFalse(eventManager.hasHandler(UselessEvent.class, this));
-		assertFalse(eventManager.hasHandler(UselessEvent.class, this, handler));
-
-		entry.cancel();
-	}
-	
-	@Test
-	public void testTypeFilteredHasHandler()
-	{
-		UselessEventHandler handler = new UselessEventHandler()
-		{
-		};
-		
-		assertFalse(eventManager.hasHandler(UselessEvent.class, EventManagerTest.class, handler));
-		
-		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, EventManagerTest.class, handler, HandlerPriority.NORMAL);
-		
-		assertFalse(eventManager.hasHandler(UselessEvent.class, handler));
-		assertFalse(eventManager.hasHandler(UselessEvent.class, Object.class));
-		assertFalse(eventManager.hasHandler(UselessEvent.class, Object.class, handler));
-		assertTrue(eventManager.hasHandler(UselessEvent.class, EventManagerTest.class));
-		assertTrue(eventManager.hasHandler(UselessEvent.class, EventManagerTest.class, handler));
-		assertFalse(eventManager.hasHandler(UselessEvent.class, this));
-		assertFalse(eventManager.hasHandler(UselessEvent.class, this, handler));
-
-		entry.cancel();
-	}
-	
-	@Test
-	public void testInstanceFilteredHasHandler()
-	{
-		UselessEventHandler handler = new UselessEventHandler()
-		{
-		};
-		
-		assertFalse(eventManager.hasHandler(UselessEvent.class, this, handler));
-		
-		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, this, handler, HandlerPriority.NORMAL);
-		
-		assertFalse(eventManager.hasHandler(UselessEvent.class, handler));
-		assertFalse(eventManager.hasHandler(UselessEvent.class, Object.class));
-		assertFalse(eventManager.hasHandler(UselessEvent.class, Object.class, handler));
-		assertFalse(eventManager.hasHandler(UselessEvent.class, EventManagerTest.class));
-		assertFalse(eventManager.hasHandler(UselessEvent.class, EventManagerTest.class, handler));
-		assertTrue(eventManager.hasHandler(UselessEvent.class, this));
-		assertTrue(eventManager.hasHandler(UselessEvent.class, this, handler));
-		
-		entry.cancel();
-	}
 	
 	@Test
 	public void testCatchException()
@@ -310,15 +219,5 @@ public class EventManagerTest
 		eventManager.dispatchEvent(throwableHandler, new UselessEvent());
 		
 		assertSame(exception, queue.poll());
-	}
-	
-	@Test
-	public void testIllgalHasHandler()
-	{
-		eventManager.hasHandler(UselessEvent.class, (EventHandler)null);
-		eventManager.hasHandler(UselessEvent.class, (Class<?>)null);
-		eventManager.hasHandler(UselessEvent.class, (Class<?>)null, null);
-		eventManager.hasHandler(UselessEvent.class, new Object());
-		eventManager.hasHandler(UselessEvent.class, new Object(), null);
 	}
 }

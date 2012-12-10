@@ -249,53 +249,6 @@ public class EventManagerImpl implements EventManager
 	}
 	
 	@Override
-	public boolean hasHandler(Class<? extends Event> type, EventHandler handler)
-	{
-		return hasHandler(type, Object.class, handler);
-	}
-	
-	@Override
-	public boolean hasHandler(Class<? extends Event> type, Class<?> clz)
-	{
-		return hasHandler(type, (Object) clz);
-	}
-	
-	@Override
-	public boolean hasHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler)
-	{
-		return hasHandler(type, (Object) clz, handler);
-	}
-	
-	@Override
-	public boolean hasHandler(Class<? extends Event> type, Object object)
-	{
-		Map<Object, Queue<Reference<HandlerEntry>>> objectEntriesMap = handlerEntryContainersMap.get(type);
-		if (objectEntriesMap == null) return false;
-		
-		Queue<Reference<HandlerEntry>> entries = objectEntriesMap.get(object);
-		if (entries == null) return false;
-		
-		return true;
-	}
-	
-	@Override
-	public boolean hasHandler(Class<? extends Event> type, Object object, EventHandler handler)
-	{
-		Map<Object, Queue<Reference<HandlerEntry>>> objectEntriesMap = handlerEntryContainersMap.get(type);
-		if (objectEntriesMap == null) return false;
-		
-		Queue<Reference<HandlerEntry>> entries = objectEntriesMap.get(object);
-		if (entries == null) return false;
-		
-		for (Reference<HandlerEntry> ref : entries)
-		{
-			if (ref.get().getHandler() == handler) return true;
-		}
-		
-		return false;
-	}
-	
-	@Override
 	public <T extends Event> void dispatchEvent(T event, Object... objects)
 	{
 		dispatchEvent(null, event, objects);
