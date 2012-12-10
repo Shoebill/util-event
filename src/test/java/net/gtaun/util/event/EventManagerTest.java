@@ -53,7 +53,7 @@ public class EventManagerTest
 			}
 		};
 		
-		eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
+		eventManager.registerHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
 		
 		UselessEvent event = new UselessEvent();
 		eventManager.dispatchEvent(event);
@@ -75,7 +75,7 @@ public class EventManagerTest
 			}
 		};
 		
-		eventManager.addHandler(InterruptableEvent.class, this, handler, HandlerPriority.NORMAL);
+		eventManager.registerHandler(InterruptableEvent.class, this, handler, HandlerPriority.NORMAL);
 		
 		InterruptableEvent event = new InterruptableEvent();
 		eventManager.dispatchEvent(event, this);
@@ -99,7 +99,7 @@ public class EventManagerTest
 			}
 		};
 		
-		eventManager.addHandler(InterruptableEvent.class, EventManagerTest.class, handler, HandlerPriority.NORMAL);
+		eventManager.registerHandler(InterruptableEvent.class, EventManagerTest.class, handler, HandlerPriority.NORMAL);
 		
 		InterruptableEvent event = new InterruptableEvent();
 		eventManager.dispatchEvent(event, this);
@@ -127,7 +127,7 @@ public class EventManagerTest
 		{
 		};
 		
-		eventManager.addHandler(InterruptableEvent.class, Cloneable.class, handler, HandlerPriority.NORMAL);
+		eventManager.registerHandler(InterruptableEvent.class, Cloneable.class, handler, HandlerPriority.NORMAL);
 		
 		InterruptableEvent event = new InterruptableEvent();
 		eventManager.dispatchEvent(event, cloneable);
@@ -149,7 +149,7 @@ public class EventManagerTest
 			}
 		};
 		
-		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
+		HandlerEntry entry = eventManager.registerHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
 		entry.cancel();
 		
 		UselessEvent event = new UselessEvent();
@@ -182,8 +182,8 @@ public class EventManagerTest
 			}
 		};
 
-		eventManager.addHandler(InterruptableEvent.class, handler, HandlerPriority.NORMAL);
-		eventManager.addHandler(InterruptableEvent.class, handler2, HandlerPriority.NORMAL);
+		eventManager.registerHandler(InterruptableEvent.class, handler, HandlerPriority.NORMAL);
+		eventManager.registerHandler(InterruptableEvent.class, handler2, HandlerPriority.NORMAL);
 		
 		InterruptableEvent event = new InterruptableEvent();
 		eventManager.dispatchEvent(event);
@@ -215,7 +215,7 @@ public class EventManagerTest
 			}
 		};
 		
-		eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
+		eventManager.registerHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
 		eventManager.dispatchEvent(throwableHandler, new UselessEvent());
 		
 		assertSame(exception, queue.poll());

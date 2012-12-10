@@ -40,7 +40,7 @@ public class EntryTest
 		{
 		};
 		
-		HandlerEntry entry = eventManager.addHandler(UselessEvent.class, EntryTest.class, handler, HandlerPriority.LOWEST);
+		HandlerEntry entry = eventManager.registerHandler(UselessEvent.class, EntryTest.class, handler, HandlerPriority.LOWEST);
 
 		assertSame(UselessEvent.class, entry.getType());
 		assertSame(EntryTest.class, entry.getRelatedObject());

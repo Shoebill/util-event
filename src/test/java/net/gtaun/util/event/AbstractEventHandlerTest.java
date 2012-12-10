@@ -101,7 +101,7 @@ public class AbstractEventHandlerTest
 		
 		AbstractEventHandler handler = new Handler();
 		
-		eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
+		eventManager.registerHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
 		
 		UselessEvent event = new UselessEvent();
 		eventManager.dispatchEvent(event);
@@ -128,7 +128,7 @@ public class AbstractEventHandlerTest
 		
 		AbstractEventHandler handler = new Handler();
 		
-		eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
+		eventManager.registerHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
 		
 		UselessEvent event = new UselessEvent();
 		eventManager.dispatchEvent(event);
@@ -161,7 +161,7 @@ public class AbstractEventHandlerTest
 		
 		AbstractEventHandler handler = new Handler();
 		
-		eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
+		eventManager.registerHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
 		
 		UselessEvent event = new UselessEvent();
 		eventManager.dispatchEvent(event);
@@ -194,7 +194,7 @@ public class AbstractEventHandlerTest
 		
 		AbstractEventHandler handler = new Handler();
 		
-		eventManager.addHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
+		eventManager.registerHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
 		
 		UselessEvent event = new UselessEvent();
 		eventManager.dispatchEvent(event);

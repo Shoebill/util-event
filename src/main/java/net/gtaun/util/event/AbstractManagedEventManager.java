@@ -131,44 +131,44 @@ abstract class AbstractManagedEventManager implements EventManager
 	public abstract void cancelAll();
 
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, HandlerPriority priority)
+	public HandlerEntry registerHandler(Class<? extends Event> type, EventHandler handler, HandlerPriority priority)
 	{
-		HandlerEntry entry = eventManager.addHandler(type, handler, priority);
+		HandlerEntry entry = eventManager.registerHandler(type, handler, priority);
 		return register(entry);
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, short priority)
+	public HandlerEntry registerHandler(Class<? extends Event> type, EventHandler handler, short priority)
 	{
-		HandlerEntry entry = eventManager.addHandler(type, handler, priority);
+		HandlerEntry entry = eventManager.registerHandler(type, handler, priority);
 		return register(entry);
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, HandlerPriority priority)
+	public HandlerEntry registerHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, HandlerPriority priority)
 	{
-		HandlerEntry entry = eventManager.addHandler(type, clz, handler, priority);
+		HandlerEntry entry = eventManager.registerHandler(type, clz, handler, priority);
 		return register(entry);
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, short priority)
+	public HandlerEntry registerHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, short priority)
 	{
-		HandlerEntry entry = eventManager.addHandler(type, clz, handler, priority);
+		HandlerEntry entry = eventManager.registerHandler(type, clz, handler, priority);
 		return register(entry);
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, HandlerPriority priority)
+	public HandlerEntry registerHandler(Class<? extends Event> type, Object object, EventHandler handler, HandlerPriority priority)
 	{
-		HandlerEntry entry = eventManager.addHandler(type, object, handler, priority);
+		HandlerEntry entry = eventManager.registerHandler(type, object, handler, priority);
 		return register(entry);
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, short priority)
+	public HandlerEntry registerHandler(Class<? extends Event> type, Object object, EventHandler handler, short priority)
 	{
-		HandlerEntry entry = eventManager.addHandler(type, object, handler, priority);
+		HandlerEntry entry = eventManager.registerHandler(type, object, handler, priority);
 		return register(entry);
 	}
 	

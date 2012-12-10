@@ -154,7 +154,7 @@ public interface EventManager
 	}
 	
 	/**
-	 * Add a global event handler.
+	 * Register a global event handler.
 	 * 
 	 * @param type Related event type
 	 * @param handler Instance of event handler
@@ -164,10 +164,10 @@ public interface EventManager
 	 *  
 	 * @see HandlerPriority
 	 */
-	HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, HandlerPriority priority);
+	HandlerEntry registerHandler(Class<? extends Event> type, EventHandler handler, HandlerPriority priority);
 	
 	/**
-	 * Add a global event handler.
+	 * Register a global event handler.
 	 * 
 	 * @param type Related event type
 	 * @param handler Instance of event handler
@@ -177,10 +177,10 @@ public interface EventManager
 	 *  
 	 * @see HandlerPriority
 	 */
-	HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, short priority);
+	HandlerEntry registerHandler(Class<? extends Event> type, EventHandler handler, short priority);
 	
 	/**
-	 * Add a event handler that related with a class.<p>
+	 * Register a event handler that related with a class.<p>
 	 * Only monitor the event that related with this class.
 	 * 
 	 * @param type Related event type
@@ -192,10 +192,10 @@ public interface EventManager
 	 *  
 	 * @see HandlerPriority
 	 */
-	HandlerEntry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, HandlerPriority priority);
+	HandlerEntry registerHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, HandlerPriority priority);
 	
 	/**
-	 * Add a event handler that related with a class.<p>
+	 * Register a event handler that related with a class.<p>
 	 * Only monitor the event that related with this class.
 	 * 
 	 * @param type Related event type
@@ -207,10 +207,10 @@ public interface EventManager
 	 *  
 	 * @see HandlerPriority
 	 */
-	HandlerEntry addHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, short priority);
+	HandlerEntry registerHandler(Class<? extends Event> type, Class<?> clz, EventHandler handler, short priority);
 	
 	/**
-	 * Add a event handler that related with an instance.<p>
+	 * Register a event handler that related with an instance.<p>
 	 * Only monitor the event that related with this instance.
 	 * 
 	 * @param type Related event type
@@ -222,10 +222,10 @@ public interface EventManager
 	 *  
 	 * @see HandlerPriority
 	 */
-	HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, HandlerPriority priority);
+	HandlerEntry registerHandler(Class<? extends Event> type, Object object, EventHandler handler, HandlerPriority priority);
 	
 	/**
-	 * Add a event handler that related with an instance.<p>
+	 * Register a event handler that related with an instance.<p>
 	 * Only monitor the event that related with this instance.
 	 * 
 	 * @param type Related event type
@@ -237,7 +237,7 @@ public interface EventManager
 	 *  
 	 * @see HandlerPriority
 	 */
-	HandlerEntry addHandler(Class<? extends Event> type, Object object, EventHandler handler, short priority);
+	HandlerEntry registerHandler(Class<? extends Event> type, Object object, EventHandler handler, short priority);
 	
 	/**
 	 * Dispatch events according to handler's priority.

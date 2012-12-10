@@ -140,37 +140,37 @@ public class EventManagerImpl implements EventManager
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, HandlerPriority priority)
+	public HandlerEntry registerHandler(Class<? extends Event> type, EventHandler handler, HandlerPriority priority)
 	{
-		return addHandler(type, Object.class, handler, priority.getValue());
+		return registerHandler(type, Object.class, handler, priority.getValue());
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, EventHandler handler, short priority)
+	public HandlerEntry registerHandler(Class<? extends Event> type, EventHandler handler, short priority)
 	{
-		return addHandler(type, Object.class, handler, priority);
+		return registerHandler(type, Object.class, handler, priority);
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, Class<?> relatedClass, EventHandler handler, HandlerPriority priority)
+	public HandlerEntry registerHandler(Class<? extends Event> type, Class<?> relatedClass, EventHandler handler, HandlerPriority priority)
 	{
-		return addHandler(type, (Object) relatedClass, handler, priority.getValue());
+		return registerHandler(type, (Object) relatedClass, handler, priority.getValue());
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, Class<?> relatedClass, EventHandler handler, short customPriority)
+	public HandlerEntry registerHandler(Class<? extends Event> type, Class<?> relatedClass, EventHandler handler, short customPriority)
 	{
-		return addHandler(type, (Object) relatedClass, handler, customPriority);
+		return registerHandler(type, (Object) relatedClass, handler, customPriority);
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, Object relatedObject, EventHandler handler, HandlerPriority priority)
+	public HandlerEntry registerHandler(Class<? extends Event> type, Object relatedObject, EventHandler handler, HandlerPriority priority)
 	{
-		return addHandler(type, relatedObject, handler, priority.getValue());
+		return registerHandler(type, relatedObject, handler, priority.getValue());
 	}
 	
 	@Override
-	public HandlerEntry addHandler(Class<? extends Event> type, Object relatedObject, EventHandler handler, short customPriority)
+	public HandlerEntry registerHandler(Class<? extends Event> type, Object relatedObject, EventHandler handler, short customPriority)
 	{
 		HandlerEntry entry = new HandlerEntryImpl(type, relatedObject, handler, customPriority);
 		return addHandlerEntry(entry);
