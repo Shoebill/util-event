@@ -26,7 +26,6 @@ public interface EventManager
 	/**
 	 * Interface of EventHandler entry that is registered. 
 	 * Use for getting informations of handler and canceling event.
-	 * Keeping the reference of entry's instance is necessary, or it will be recycled by GC.
 	 */
 	public interface HandlerEntry
 	{

@@ -16,10 +16,7 @@
 
 package net.gtaun.util.event;
 
-import java.lang.ref.Reference;
-import java.lang.ref.WeakReference;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -28,9 +25,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import net.gtaun.util.event.events.EventHandlerAddedEvent;
-import net.gtaun.util.event.events.EventHandlerRemovedEvent;
 
 /**
  * Standard implementation class of event manager.
@@ -83,9 +77,6 @@ public class EventManagerImpl implements EventManager
 			
 			if(isCanceled) return;
 			cancel();
-
-			EventHandlerRemovedEvent event = new EventHandlerRemovedEvent(this);
-			dispatchEvent(event, this);
 		}
 		
 		@Override
@@ -140,7 +131,7 @@ public class EventManagerImpl implements EventManager
 	}
 	
 	
-	private Map<Class<? extends Event>, Map<Object, Queue<Reference<HandlerEntry>>>> handlerEntryContainersMap;
+	private Map<Class<? extends Event>, Map<Object, Queue<HandlerEntry>>> handlerEntryContainersMap;
 	
 	
 	public EventManagerImpl()
@@ -190,25 +181,21 @@ public class EventManagerImpl implements EventManager
 		Class<? extends Event> type = entry.getType();
 		Object relatedObject = entry.getRelatedObject();
 		
-		Map<Object, Queue<Reference<HandlerEntry>>> objectEntriesMap = handlerEntryContainersMap.get(type);
+		Map<Object, Queue<HandlerEntry>> objectEntriesMap = handlerEntryContainersMap.get(type);
 		if (objectEntriesMap == null)
 		{
-			objectEntriesMap = new ConcurrentHashMap<Object, Queue<Reference<HandlerEntry>>>();
+			objectEntriesMap = new ConcurrentHashMap<Object, Queue<HandlerEntry>>();
 			handlerEntryContainersMap.put(type, objectEntriesMap);
 		}
 		
-		Queue<Reference<HandlerEntry>> entries = objectEntriesMap.get(relatedObject);
+		Queue<HandlerEntry> entries = objectEntriesMap.get(relatedObject);
 		if (entries == null)
 		{
-			entries = new ConcurrentLinkedQueue<Reference<HandlerEntry>>();
+			entries = new ConcurrentLinkedQueue<HandlerEntry>();
 			objectEntriesMap.put(relatedObject, entries);
 		}
 		
-		entries.add(new WeakReference<HandlerEntry>(entry));
-		
-		EventHandlerAddedEvent event = new EventHandlerAddedEvent(entry);
-		dispatchEvent(event, this);
-		
+		entries.add(entry);
 		return entry;
 	}
 	
@@ -219,30 +206,13 @@ public class EventManagerImpl implements EventManager
 		Class<? extends Event> type = entry.getType();
 		Object relatedObject = entry.getRelatedObject();
 		
-		Map<Object, Queue<Reference<HandlerEntry>>> objectEntriesMap = handlerEntryContainersMap.get(type);
+		Map<Object, Queue<HandlerEntry>> objectEntriesMap = handlerEntryContainersMap.get(type);
 		if (objectEntriesMap == null) return;
 		
-		Queue<Reference<HandlerEntry>> entries = objectEntriesMap.get(relatedObject);
+		Queue<HandlerEntry> entries = objectEntriesMap.get(relatedObject);
 		if (entries == null) return;
 		
-		Iterator<Reference<HandlerEntry>> iterator = entries.iterator();
-		while(iterator.hasNext())
-		{
-			Reference<HandlerEntry> ref = iterator.next();
-			HandlerEntry e = ref.get();
-			
-			if (e == null)
-			{
-				iterator.remove();
-				continue;
-			}
-			
-			if (e != entry ) continue;
-			iterator.remove();
-			
-			EventHandlerRemovedEvent event = new EventHandlerRemovedEvent(entry);
-			dispatchEvent(event, this);
-		}
+		entries.remove(entry);
 		
 		if (entries.size() == 0) objectEntriesMap.remove(relatedObject);
 		if (objectEntriesMap.size() == 0) handlerEntryContainersMap.remove(type);
@@ -263,50 +233,35 @@ public class EventManagerImpl implements EventManager
 		Class<? extends Event> type = event.getClass();
 		PriorityQueue<HandlerEntry> handlerEntryQueue = new PriorityQueue<HandlerEntry>(16, HANDLER_ENTRY_PRIORITY_COMPARATOR);
 		
-		Map<Object, Queue<Reference<HandlerEntry>>> objectEntriesMap = handlerEntryContainersMap.get(type);
+		Map<Object, Queue<HandlerEntry>> objectEntriesMap = handlerEntryContainersMap.get(type);
 		if (objectEntriesMap == null) return;
 		
 		for (Object object : objects)
 		{
 			Class<?> cls = object.getClass();
 			
-			Queue<Reference<HandlerEntry>> entries = objectEntriesMap.get(object);
+			Queue<HandlerEntry> entries = objectEntriesMap.get(object);
 			if (entries != null)
 			{
-				for (Reference<HandlerEntry> ref : entries)
-				{
-					HandlerEntry entry = ref.get();
-					if (entry == null) continue;
-					else handlerEntryQueue.add(entry);
-				}
+				for (HandlerEntry entry : entries) handlerEntryQueue.add(entry);
 			}
 			
 			Class<?>[] interfaces = cls.getInterfaces();
 			for (Class<?> clz : interfaces)
 			{
-				Queue<Reference<HandlerEntry>> classEntries = objectEntriesMap.get(clz);
+				Queue<HandlerEntry> classEntries = objectEntriesMap.get(clz);
 				if (classEntries != null)
 				{
-					for (Reference<HandlerEntry> ref : classEntries)
-					{
-						HandlerEntry entry = ref.get();
-						if (entry == null) continue;
-						else handlerEntryQueue.add(entry);
-					}
+					for (HandlerEntry entry : classEntries) handlerEntryQueue.add(entry);
 				}
 			}
 			
 			for (Class<?> clz = cls; clz != null; clz = clz.getSuperclass())
 			{
-				Queue<Reference<HandlerEntry>> classEntries = objectEntriesMap.get(clz);
+				Queue<HandlerEntry> classEntries = objectEntriesMap.get(clz);
 				if (classEntries != null)
 				{
-					for (Reference<HandlerEntry> ref : classEntries)
-					{
-						HandlerEntry entry = ref.get();
-						if (entry == null) continue;
-						else handlerEntryQueue.add(entry);
-					}
+					for (HandlerEntry entry : classEntries) handlerEntryQueue.add(entry);
 				}
 			}
 		}

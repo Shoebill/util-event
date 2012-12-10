@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2012 MK124
+ * Copyright (C) 2012 MK124
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,24 @@
 
 package net.gtaun.util.event;
 
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * Event manager that is managed.
- * Used for managing and recycling event handlers that has lifetime.
+ * 
+ * Keeping the reference of entry's instance is necessary, or it will be recycled by GC.
  * 
  * @author MK124
  */
-public class ManagedEventManager extends AbstractManagedEventManager implements EventManager
+public class WeakManagedEventManager extends AbstractManagedEventManager implements EventManager
 {
-	private Collection<HandlerEntry> handlerEntries;
+	private Collection<Reference<HandlerEntry>> handlerEntries;
 	
 	
-	public ManagedEventManager(EventManager eventManager)
+	public WeakManagedEventManager(EventManager eventManager)
 	{
 		super(eventManager);
 		handlerEntries = new ConcurrentLinkedQueue<>();
@@ -40,19 +43,29 @@ public class ManagedEventManager extends AbstractManagedEventManager implements 
 	protected HandlerEntry register(HandlerEntry originalEntry)
 	{
 		HandlerEntry entry = new HandlerEntryImpl(this, originalEntry);
-		handlerEntries.add(entry);
+		handlerEntries.add(new WeakReference<>(entry));
 		return entry;
 	}
-	
+
 	@Override
 	protected void remove(HandlerEntry entry)
 	{
-		handlerEntries.remove(entry);
+		for (Iterator<Reference<HandlerEntry>> iter = handlerEntries.iterator(); iter.hasNext();)
+		{
+			Reference<HandlerEntry> ref = iter.next();
+			HandlerEntry e = ref.get();
+			
+			if (e == null || e == entry) iter.remove();
+		}
 	}
-	
+
 	@Override
 	public void cancelAll()
 	{
-		for (HandlerEntry entry : handlerEntries) entry.cancel();
+		for (Reference<HandlerEntry> ref : handlerEntries)
+		{
+			HandlerEntry entry = ref.get();
+			if (entry != null) entry.cancel();	
+		}
 	}
 }
