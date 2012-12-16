@@ -79,6 +79,7 @@ public abstract class AbstractEventHandler implements EventHandler
 		
 		try
 		{
+			method.setAccessible(true);
 			method.invoke(this, event);
 		}
 		catch (InvocationTargetException e)
