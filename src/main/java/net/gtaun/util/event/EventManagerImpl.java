@@ -238,6 +238,7 @@ public class EventManagerImpl implements EventManager
 		
 		for (Object object : objects)
 		{
+			if (object == null) continue;
 			Class<?> cls = object.getClass();
 			
 			Queue<HandlerEntry> entries = objectEntriesMap.get(object);
