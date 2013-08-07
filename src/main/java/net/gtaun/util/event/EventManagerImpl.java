@@ -228,7 +228,6 @@ public class EventManagerImpl implements EventManager
 	public <T extends Event> void dispatchEvent(ThrowableHandler throwableHandler, T event, Object... objects)
 	{
 		if (throwableHandler == null) throwableHandler = DEFAULT_THROWABLE_HANDLER;
-		if (objects.length == 0) objects = new Object[] { new Object() };
 		
 		Class<? extends Event> type = event.getClass();
 		PriorityQueue<HandlerEntry> handlerEntryQueue = new PriorityQueue<HandlerEntry>(16, HANDLER_ENTRY_PRIORITY_COMPARATOR);
@@ -257,7 +256,7 @@ public class EventManagerImpl implements EventManager
 				}
 			}
 			
-			for (Class<?> clz = cls; clz != null; clz = clz.getSuperclass())
+			for (Class<?> clz = cls; clz != Object.class; clz = clz.getSuperclass())
 			{
 				Queue<HandlerEntry> classEntries = objectEntriesMap.get(clz);
 				if (classEntries != null)
@@ -265,6 +264,12 @@ public class EventManagerImpl implements EventManager
 					for (HandlerEntry entry : classEntries) handlerEntryQueue.add(entry);
 				}
 			}
+		}
+		
+		Queue<HandlerEntry> entries = objectEntriesMap.get(Object.class);
+		if (entries != null)
+		{
+			for (HandlerEntry entry : entries) handlerEntryQueue.add(entry);
 		}
 		
 		while (handlerEntryQueue.isEmpty() == false && event.isInterrupted() == false)

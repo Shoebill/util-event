@@ -44,21 +44,25 @@ public class EventManagerTest
 	@Test
 	public void testAddHandlerAndDispatchEvent()
 	{
+		final TapableCounter counter = new TapableCounter();
+		
 		UselessEventHandler handler = new UselessEventHandler()
 		{
 			@Override
-			public void onUselessEvent(UselessEvent event)
+			public void onInterruptableEvent(InterruptableEvent event)
 			{
-				event.setProcessed(true);
+				counter.tap();
 			}
 		};
 		
-		eventManager.registerHandler(UselessEvent.class, handler, HandlerPriority.NORMAL);
+		eventManager.registerHandler(InterruptableEvent.class, handler, HandlerPriority.NORMAL);
 		
-		UselessEvent event = new UselessEvent();
+		InterruptableEvent event = new InterruptableEvent();
+		eventManager.dispatchEvent(event, this);
+		eventManager.dispatchEvent(event, new Object(), this);
 		eventManager.dispatchEvent(event);
 		
-		assertTrue(event.isProcessed());
+		assertEquals(3, counter.getTaps());
 	}
 	
 	@Test
