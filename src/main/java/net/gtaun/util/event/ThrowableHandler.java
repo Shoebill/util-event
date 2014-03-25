@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2014 MK124
+ * Copyright (C) 2012-2013 MK124
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,14 @@
 package net.gtaun.util.event;
 
 /**
- * Interface of event handler.
- * 
- * @author MK124
+ * Interface of exception handler that thrown by event handler.
  */
-public interface EventHandler<E extends Event>
+public interface ThrowableHandler
 {
 	/**
-	 * Handle event.
+	 * Handle the exception.
 	 * 
-	 * @param event Instance of event.
-	 * @throws Throwable Exceptions that might be thrown.
+	 * @param throwable Exception thrown by event handler.
 	 */
-	void handleEvent(E event) throws Throwable;
+	void handleThrowable(Throwable throwable);
 }

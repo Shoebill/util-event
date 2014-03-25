@@ -56,13 +56,13 @@ public class EventManagerImpl implements EventManager
 	{
 		private Class<? extends Event> type;
 		private Object relatedObject;
-		private EventHandler handler;
+		private EventHandler<?> handler;
 		private short priority;
 		
 		private boolean isCanceled = false;
 		
 		
-		public HandlerEntryImpl(Class<? extends Event> type, Object relatedObject, EventHandler handler, short priority)
+		public HandlerEntryImpl(Class<? extends Event> type, Object relatedObject, EventHandler<?> handler, short priority)
 		{
 			this.type = type;
 			this.relatedObject = relatedObject;
@@ -118,7 +118,7 @@ public class EventManagerImpl implements EventManager
 		}
 
 		@Override
-		public EventHandler getHandler()
+		public EventHandler<?> getHandler()
 		{
 			return handler;
 		}
@@ -140,39 +140,9 @@ public class EventManagerImpl implements EventManager
 	}
 	
 	@Override
-	public HandlerEntry registerHandler(Class<? extends Event> type, EventHandler handler, HandlerPriority priority)
+	public <E extends Event> HandlerEntry registerHandler(Class<E> type, short priority, Concerns concerns, EventHandler<E> handler)
 	{
-		return registerHandler(type, Object.class, handler, priority.getValue());
-	}
-	
-	@Override
-	public HandlerEntry registerHandler(Class<? extends Event> type, EventHandler handler, short priority)
-	{
-		return registerHandler(type, Object.class, handler, priority);
-	}
-	
-	@Override
-	public HandlerEntry registerHandler(Class<? extends Event> type, Class<?> relatedClass, EventHandler handler, HandlerPriority priority)
-	{
-		return registerHandler(type, (Object) relatedClass, handler, priority.getValue());
-	}
-	
-	@Override
-	public HandlerEntry registerHandler(Class<? extends Event> type, Class<?> relatedClass, EventHandler handler, short customPriority)
-	{
-		return registerHandler(type, (Object) relatedClass, handler, customPriority);
-	}
-	
-	@Override
-	public HandlerEntry registerHandler(Class<? extends Event> type, Object relatedObject, EventHandler handler, HandlerPriority priority)
-	{
-		return registerHandler(type, relatedObject, handler, priority.getValue());
-	}
-	
-	@Override
-	public HandlerEntry registerHandler(Class<? extends Event> type, Object relatedObject, EventHandler handler, short customPriority)
-	{
-		HandlerEntry entry = new HandlerEntryImpl(type, relatedObject, handler, customPriority);
+		HandlerEntry entry = new HandlerEntryImpl(type, null, handler, priority);
 		return addHandlerEntry(entry);
 	}
 	
@@ -218,12 +188,7 @@ public class EventManagerImpl implements EventManager
 		if (objectEntriesMap.size() == 0) handlerEntryContainersMap.remove(type);
 	}
 	
-	@Override
-	public <T extends Event> void dispatchEvent(T event, Object... objects)
-	{
-		dispatchEvent(null, event, objects);
-	}
-	
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Event> void dispatchEvent(ThrowableHandler throwableHandler, T event, Object... objects)
 	{
@@ -275,7 +240,7 @@ public class EventManagerImpl implements EventManager
 		while (handlerEntryQueue.isEmpty() == false && event.isInterrupted() == false)
 		{
 			HandlerEntry entry = handlerEntryQueue.poll();
-			EventHandler handler = entry.getHandler();
+			EventHandler<T> handler = (EventHandler<T>) entry.getHandler();
 			
 			if (handler == null) continue;
 			
