@@ -116,4 +116,11 @@ public interface EventManager
 	 */
 	<E extends Event>
 	void dispatchEvent(ThrowableHandler handler, E event, Object... objects);
+	
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
+	EventManagerNode createChildNode();
 }

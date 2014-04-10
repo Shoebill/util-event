@@ -42,20 +42,6 @@ public interface HandlerEntry
 	public Class<? extends Event> getType();
 	
 	/**
-	 * Get the instance of related Object that this entry registered.
-	 * 
-	 * @return Related Object
-	 */
-	public Object getRelatedObject();
-	
-	/**
-	 * Get the instance of related Class that this entry registered.
-	 * 
-	 * @return Related Class
-	 */
-	public Class<?> getRelatedClass();
-	
-	/**
 	 * Get the instance of EventHandler.
 	 * 
 	 * @return Instance of EventHandler

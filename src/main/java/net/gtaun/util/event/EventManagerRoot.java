@@ -23,15 +23,12 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 /**
  * Standard implementation class of event manager.
  * 
  * @author MK124
  */
-public class EventManagerImpl implements EventManager
+public class EventManagerRoot implements EventManager
 {
 	private static final ThrowableHandler DEFAULT_THROWABLE_HANDLER = new ThrowableHandler()
 	{
@@ -52,43 +49,17 @@ public class EventManagerImpl implements EventManager
 		}
 	};
 	
-	public class HandlerEntryImpl implements HandlerEntry
+	public class HandlerEntryImpl extends AbstractHandlerEntry implements HandlerEntry
 	{
-		private Class<? extends Event> type;
-		private Object relatedObject;
-		private EventHandler<?> handler;
-		private short priority;
-		
-		private boolean isCanceled = false;
-		
-		
-		public HandlerEntryImpl(Class<? extends Event> type, Object relatedObject, EventHandler<?> handler, short priority)
+		public HandlerEntryImpl(Class<? extends Event> type, EventHandler<?> handler, short priority)
 		{
-			this.type = type;
-			this.relatedObject = relatedObject;
-			this.handler = handler;
-			this.priority = priority;
-		}
-		
-		@Override
-		protected void finalize() throws Throwable
-		{
-			super.finalize();
-			
-			if(isCanceled) return;
-			cancel();
-		}
-		
-		@Override
-		public String toString()
-		{
-			return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+			super(type, handler, priority);
 		}
 		
 		@Override
 		public EventManager getEventManager()
 		{
-			return EventManagerImpl.this;
+			return EventManagerRoot.this;
 		}
 		
 		@Override
@@ -97,44 +68,13 @@ public class EventManagerImpl implements EventManager
 			removeHandler(this);
 			isCanceled = true;
 		}
-
-		@Override
-		public Class<? extends Event> getType()
-		{
-			return type;
-		}
-
-		@Override
-		public Object getRelatedObject()
-		{
-			return relatedObject;
-		}
-
-		@Override
-		public Class<?> getRelatedClass()
-		{
-			if (relatedObject instanceof Class) return (Class<?>) relatedObject;
-			return null;
-		}
-
-		@Override
-		public EventHandler<?> getHandler()
-		{
-			return handler;
-		}
-
-		@Override
-		public short getPriority()
-		{
-			return priority;
-		}
 	}
 	
 	
 	private Map<Class<? extends Event>, Map<Object, Queue<HandlerEntry>>> handlerEntryContainersMap;
 	
 	
-	public EventManagerImpl()
+	public EventManagerRoot()
 	{
 		handlerEntryContainersMap = new ConcurrentHashMap<>();
 	}
@@ -142,14 +82,14 @@ public class EventManagerImpl implements EventManager
 	@Override
 	public <E extends Event> HandlerEntry registerHandler(Class<E> type, short priority, Concerns concerns, EventHandler<E> handler)
 	{
-		HandlerEntry entry = new HandlerEntryImpl(type, null, handler, priority);
+		HandlerEntry entry = new HandlerEntryImpl(type, handler, priority);
 		return addHandlerEntry(entry);
 	}
 	
 	private HandlerEntry addHandlerEntry(HandlerEntry entry)
 	{
 		Class<? extends Event> type = entry.getType();
-		Object relatedObject = entry.getRelatedObject();
+		Object relatedObject = null;
 		
 		Map<Object, Queue<HandlerEntry>> objectEntriesMap = handlerEntryContainersMap.get(type);
 		if (objectEntriesMap == null)
@@ -174,7 +114,7 @@ public class EventManagerImpl implements EventManager
 		if (entry == null) return;
 		
 		Class<? extends Event> type = entry.getType();
-		Object relatedObject = entry.getRelatedObject();
+		Object relatedObject = null;
 		
 		Map<Object, Queue<HandlerEntry>> objectEntriesMap = handlerEntryContainersMap.get(type);
 		if (objectEntriesMap == null) return;
@@ -253,5 +193,11 @@ public class EventManagerImpl implements EventManager
 				throwableHandler.handleThrowable(e);
 			}
 		}
+	}
+
+	@Override
+	public EventManagerNode createChildNode()
+	{
+		return new EventManagerChild(this);
 	}
 }
