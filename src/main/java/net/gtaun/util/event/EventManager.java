@@ -27,7 +27,25 @@ public interface EventManager
 	 * Register a global event handler.
 	 * 
 	 * @param <E> Event type
-	 * @param type instance of Event class
+	 * @param type Instance of Event class
+	 * @param handler Instance of event handler
+	 *  
+	 * @return Entry of event handler
+	 *  
+	 * @see HandlerPriority
+	 */
+	default
+	<E extends Event>
+	HandlerEntry registerHandler(Class<E> type, EventHandler<E> handler)
+	{
+		return registerHandler(type, HandlerPriority.NORMAL.getValue(), Attentions.all(), handler);
+	}
+	
+	/**
+	 * Register a global event handler.
+	 * 
+	 * @param <E> Event type
+	 * @param type Instance of Event class
 	 * @param priority Priority of event handler
 	 * @param handler Instance of event handler
 	 *  
@@ -46,7 +64,7 @@ public interface EventManager
 	 * Register a global event handler.
 	 * 
 	 * @param <E> Event type
-	 * @param type instance of Event class
+	 * @param type Instance of Event class
 	 * @param priority Custom priority of event handler
 	 * @param handler Instance of event handler
 	 *  
@@ -64,7 +82,7 @@ public interface EventManager
 	 * Only monitor the event that related with this instance.
 	 * 
 	 * @param <E> Event type
-	 * @param type instance of Event class
+	 * @param type Instance of Event class
 	 * @param priority Priority of event handler
 	 * @param concerns Concerns instance
 	 * @param handler Instance of event handler
@@ -85,7 +103,7 @@ public interface EventManager
 	 * Only monitor the event that related with this instance.
 	 * 
 	 * @param <E> Event type
-	 * @param type instance of Event class
+	 * @param type Instance of Event class
 	 * @param priority Custom priority of event handler
 	 * @param concerns Concerns instance
 	 * @param handler Instance of event handler
