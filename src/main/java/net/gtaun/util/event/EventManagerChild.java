@@ -47,12 +47,12 @@ class EventManagerChild implements EventManagerNode
 	}
 	
 	@Override
-	public <E extends Event> HandlerEntry registerHandler(Class<E> type, short priority, Concerns concerns, EventHandler<E> handler)
+	public <E extends Event> HandlerEntry registerHandler(Class<E> type, short priority, Attentions concerns, EventHandler<E> handler)
 	{
 		checkDestroyState();
 		
 		final HandlerEntry rootEntry = rootEventManager.registerHandler(type, priority, concerns, handler);
-		final HandlerEntry entry = new AbstractHandlerEntry(type, handler, priority)
+		final HandlerEntry entry = new AbstractHandlerEntry(type, concerns, handler, priority)
 		{
 			@Override
 			public EventManager getEventManager()

@@ -39,7 +39,7 @@ public interface EventManager
 	<E extends Event>
 	HandlerEntry registerHandler(Class<E> type, HandlerPriority priority, EventHandler<E> handler)
 	{
-		return registerHandler(type, priority.getValue(), null, handler);
+		return registerHandler(type, priority.getValue(), Attentions.all(), handler);
 	}
 	
 	/**
@@ -56,7 +56,7 @@ public interface EventManager
 	<E extends Event>
 	HandlerEntry registerHandler(Class<E> type, short priority, EventHandler<E> handler)
 	{
-		return registerHandler(type, priority, null, handler);
+		return registerHandler(type, priority, Attentions.all(), handler);
 	}
 	
 	/**
@@ -75,9 +75,9 @@ public interface EventManager
 	 */
 	default
 	<E extends Event>
-	HandlerEntry registerHandler(Class<E> type, HandlerPriority priority, Concerns concerns, EventHandler<E> handler)
+	HandlerEntry registerHandler(Class<E> type, HandlerPriority priority, Attentions concerns, EventHandler<E> handler)
 	{
-		return registerHandler(type, priority.getValue(), null, handler);
+		return registerHandler(type, priority.getValue(), concerns, handler);
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public interface EventManager
 	 * @return Entry of event handler
 	 */
 	<E extends Event>
-	HandlerEntry registerHandler(Class<E> type, short priority, Concerns concerns, EventHandler<E> handler);
+	HandlerEntry registerHandler(Class<E> type, short priority, Attentions concerns, EventHandler<E> handler);
 	
 	/**
 	 * Dispatch events according to handler's priority.

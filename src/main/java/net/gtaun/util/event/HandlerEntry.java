@@ -41,6 +41,8 @@ public interface HandlerEntry
 	 */
 	public Class<? extends Event> getType();
 	
+	public Attentions getAttentions();
+	
 	/**
 	 * Get the instance of EventHandler.
 	 * 

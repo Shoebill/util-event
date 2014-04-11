@@ -21,6 +21,7 @@ package net.gtaun.util.event;
  * 
  * @author MK124
  */
+@FunctionalInterface
 public interface EventHandler<E extends Event>
 {
 	/**

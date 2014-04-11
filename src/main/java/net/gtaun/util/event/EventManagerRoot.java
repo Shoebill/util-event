@@ -16,6 +16,7 @@
 
 package net.gtaun.util.event;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -49,27 +50,6 @@ public class EventManagerRoot implements EventManager
 		}
 	};
 	
-	public class HandlerEntryImpl extends AbstractHandlerEntry implements HandlerEntry
-	{
-		public HandlerEntryImpl(Class<? extends Event> type, EventHandler<?> handler, short priority)
-		{
-			super(type, handler, priority);
-		}
-		
-		@Override
-		public EventManager getEventManager()
-		{
-			return EventManagerRoot.this;
-		}
-		
-		@Override
-		public void cancel()
-		{
-			removeHandler(this);
-			isCanceled = true;
-		}
-	}
-	
 	
 	private Map<Class<? extends Event>, Map<Object, Queue<HandlerEntry>>> handlerEntryContainersMap;
 	
@@ -80,32 +60,49 @@ public class EventManagerRoot implements EventManager
 	}
 	
 	@Override
-	public <E extends Event> HandlerEntry registerHandler(Class<E> type, short priority, Concerns concerns, EventHandler<E> handler)
+	public <E extends Event> HandlerEntry registerHandler(Class<E> type, short priority, Attentions concerns, EventHandler<E> handler)
 	{
-		HandlerEntry entry = new HandlerEntryImpl(type, handler, priority);
+		HandlerEntry entry = new AbstractHandlerEntry(type, concerns, handler, priority)
+		{
+			@Override
+			public EventManager getEventManager()
+			{
+				return EventManagerRoot.this;
+			}
+			
+			@Override
+			public void cancel()
+			{
+				removeHandler(this);
+				isCanceled = true;
+			}
+		};
 		return addHandlerEntry(entry);
 	}
 	
 	private HandlerEntry addHandlerEntry(HandlerEntry entry)
 	{
 		Class<? extends Event> type = entry.getType();
-		Object relatedObject = null;
+		Collection<Object> attentedObjects = entry.getAttentions().getObjects();
 		
-		Map<Object, Queue<HandlerEntry>> objectEntriesMap = handlerEntryContainersMap.get(type);
-		if (objectEntriesMap == null)
+		for (Object attentedObject : attentedObjects)
 		{
-			objectEntriesMap = new ConcurrentHashMap<Object, Queue<HandlerEntry>>();
-			handlerEntryContainersMap.put(type, objectEntriesMap);
+			Map<Object, Queue<HandlerEntry>> objectEntriesMap = handlerEntryContainersMap.get(type);
+			if (objectEntriesMap == null)
+			{
+				objectEntriesMap = new ConcurrentHashMap<Object, Queue<HandlerEntry>>();
+				handlerEntryContainersMap.put(type, objectEntriesMap);
+			}
+			
+			Queue<HandlerEntry> entries = objectEntriesMap.get(attentedObject);
+			if (entries == null)
+			{
+				entries = new ConcurrentLinkedQueue<HandlerEntry>();
+				objectEntriesMap.put(attentedObject, entries);
+			}
+			
+			entries.add(entry);	
 		}
-		
-		Queue<HandlerEntry> entries = objectEntriesMap.get(relatedObject);
-		if (entries == null)
-		{
-			entries = new ConcurrentLinkedQueue<HandlerEntry>();
-			objectEntriesMap.put(relatedObject, entries);
-		}
-		
-		entries.add(entry);
 		return entry;
 	}
 	
@@ -114,18 +111,21 @@ public class EventManagerRoot implements EventManager
 		if (entry == null) return;
 		
 		Class<? extends Event> type = entry.getType();
-		Object relatedObject = null;
+		Collection<Object> attentedObjects = entry.getAttentions().getObjects();
+
+		for (Object attentedObject : attentedObjects)
+		{
+			Map<Object, Queue<HandlerEntry>> objectEntriesMap = handlerEntryContainersMap.get(type);
+			if (objectEntriesMap == null) return;
+			
+			Queue<HandlerEntry> entries = objectEntriesMap.get(attentedObject);
+			if (entries == null) return;
+			
+			entries.remove(entry);
 		
-		Map<Object, Queue<HandlerEntry>> objectEntriesMap = handlerEntryContainersMap.get(type);
-		if (objectEntriesMap == null) return;
-		
-		Queue<HandlerEntry> entries = objectEntriesMap.get(relatedObject);
-		if (entries == null) return;
-		
-		entries.remove(entry);
-		
-		if (entries.size() == 0) objectEntriesMap.remove(relatedObject);
-		if (objectEntriesMap.size() == 0) handlerEntryContainersMap.remove(type);
+			if (entries.size() == 0) objectEntriesMap.remove(attentedObject);
+			if (objectEntriesMap.size() == 0) handlerEntryContainersMap.remove(type);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")

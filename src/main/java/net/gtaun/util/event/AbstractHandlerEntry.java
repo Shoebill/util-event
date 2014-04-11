@@ -5,16 +5,18 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public abstract class AbstractHandlerEntry implements HandlerEntry
 {
-	private Class<? extends Event> type;
-	private EventHandler<?> handler;
-	private short priority;
+	private final Class<? extends Event> type;
+	private final Attentions attentions;
+	private final EventHandler<?> handler;
+	private final short priority;
 	
 	protected boolean isCanceled = false;
 	
 	
-	public AbstractHandlerEntry(Class<? extends Event> type, EventHandler<?> handler, short priority)
+	public AbstractHandlerEntry(Class<? extends Event> type, Attentions attentions, EventHandler<?> handler, short priority)
 	{
 		this.type = type;
+		this.attentions = attentions;
 		this.handler = handler;
 		this.priority = priority;
 	}
@@ -38,6 +40,12 @@ public abstract class AbstractHandlerEntry implements HandlerEntry
 	public Class<? extends Event> getType()
 	{
 		return type;
+	}
+	
+	@Override
+	public Attentions getAttentions()
+	{
+		return attentions;
 	}
 
 	@Override
