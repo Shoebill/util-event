@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeSet;
 
-public class EventManagerChild implements EventManagerNode
+class EventManagerChild implements EventManagerNode
 {
 	private EventManager rootEventManager;
 	private EventManagerNode parentEventManager;

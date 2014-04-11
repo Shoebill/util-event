@@ -26,7 +26,8 @@ public interface EventManager
 	/**
 	 * Register a global event handler.
 	 * 
-	 * @param type Related event type
+	 * @param <E> Event type
+	 * @param type instance of Event class
 	 * @param priority Priority of event handler
 	 * @param handler Instance of event handler
 	 *  
@@ -44,7 +45,8 @@ public interface EventManager
 	/**
 	 * Register a global event handler.
 	 * 
-	 * @param type Related event type
+	 * @param <E> Event type
+	 * @param type instance of Event class
 	 * @param priority Custom priority of event handler
 	 * @param handler Instance of event handler
 	 *  
@@ -61,7 +63,8 @@ public interface EventManager
 	 * Register a event handler that related with an instance.<p>
 	 * Only monitor the event that related with this instance.
 	 * 
-	 * @param type Related event type
+	 * @param <E> Event type
+	 * @param type instance of Event class
 	 * @param priority Priority of event handler
 	 * @param concerns Concerns instance
 	 * @param handler Instance of event handler
@@ -81,7 +84,8 @@ public interface EventManager
 	 * Register a event handler that related with an instance.<p>
 	 * Only monitor the event that related with this instance.
 	 * 
-	 * @param type Related event type
+	 * @param <E> Event type
+	 * @param type instance of Event class
 	 * @param priority Custom priority of event handler
 	 * @param concerns Concerns instance
 	 * @param handler Instance of event handler
@@ -96,6 +100,7 @@ public interface EventManager
 	 * It might be interrupted if event allowed.
 	 * If the handler throw exception, it will be print out and keep dispatching.
 	 * 
+	 * @param <E> Event type
 	 * @param event Instance of event to be dispatch
 	 * @param objects Related objects
 	 */
@@ -110,6 +115,7 @@ public interface EventManager
 	 * Dispatch events according to handler's priority.
 	 * It might be interrupted if event allowed.
 	 * 
+	 * @param <E> Event type
 	 * @param handler Instance of exception handler. Print out the exception directly if it's {@code null}.
 	 * @param event Instance of event to be dispatch
 	 * @param objects Related objects
@@ -120,7 +126,7 @@ public interface EventManager
 	/**
 	 * 
 	 * 
-	 * @return
+	 * @return Child node
 	 */
 	EventManagerNode createChildNode();
 }
