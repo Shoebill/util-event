@@ -3,6 +3,7 @@ package net.gtaun.util.event;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 class EventManagerChild implements EventManagerNode
 {
@@ -86,6 +87,13 @@ class EventManagerChild implements EventManagerNode
 		EventManagerNode node = rootEventManager.createChildNode();
 		childs.add(node);
 		return node;
+	}
+	
+	public void cancelAll()
+	{
+		List<HandlerEntry> entries = new ArrayList<>(handlerEntries);
+		for (HandlerEntry entry : entries) entry.cancel();
+		handlerEntries.clear();
 	}
 	
 	@Override
