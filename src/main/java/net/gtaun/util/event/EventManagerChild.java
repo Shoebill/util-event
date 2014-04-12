@@ -2,7 +2,7 @@ package net.gtaun.util.event;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 class EventManagerChild implements EventManagerNode
 {
@@ -31,7 +31,7 @@ class EventManagerChild implements EventManagerNode
 	{
 		rootEventManager = root;
 		parentEventManager = parent;
-		handlerEntries = new TreeSet<>();
+		handlerEntries = new HashSet<>();
 		childs = new ArrayList<>();
 	}
 	
