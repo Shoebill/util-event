@@ -36,6 +36,19 @@
 		</repository>
 	</repositories>
 
+	<distributionManagement>
+		<repository>
+			<id>deployment</id>
+			<name>Releases</name>
+			<url>http://repo.gtaun.net/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>deployment</id>
+			<name>Snapshots</name>
+			<url>http://repo.gtaun.net/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<licenses>
 		<license>
 			<name>Apache License,Version 2.0</name>
