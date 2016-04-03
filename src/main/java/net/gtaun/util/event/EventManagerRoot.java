@@ -23,6 +23,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 /**
  * Standard implementation class of event manager.
@@ -31,24 +32,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class EventManagerRoot implements EventManager
 {
-	private static final ThrowableHandler DEFAULT_THROWABLE_HANDLER = new ThrowableHandler()
-	{
-		@Override
-		public void handleThrowable(Throwable throwable)
-		{
-			if(throwable instanceof AssertionError) throw (AssertionError) throwable;
-			throwable.printStackTrace();
-		}
-	};
+	private static final ThrowableHandler DEFAULT_THROWABLE_HANDLER = throwable -> {
+        if(throwable instanceof AssertionError) throw (AssertionError) throwable;
+        throwable.printStackTrace();
+    };
 	
-	private static final Comparator<HandlerEntry> HANDLER_ENTRY_PRIORITY_COMPARATOR = new Comparator<HandlerEntry>()
-	{
-		@Override
-		public int compare(HandlerEntry o1, HandlerEntry o2)
-		{
-			return o2.getPriority() - o1.getPriority();
-		}
-	};
+	private static final Comparator<HandlerEntry> HANDLER_ENTRY_PRIORITY_COMPARATOR = (o1, o2) -> o2.getPriority() - o1.getPriority();
 	
 	
 	private Map<Class<? extends Event>, Map<Object, Queue<HandlerEntry>>> handlerEntryContainersMap;
@@ -90,14 +79,14 @@ public class EventManagerRoot implements EventManager
 			Map<Object, Queue<HandlerEntry>> objectEntriesMap = handlerEntryContainersMap.get(type);
 			if (objectEntriesMap == null)
 			{
-				objectEntriesMap = new ConcurrentHashMap<Object, Queue<HandlerEntry>>();
+				objectEntriesMap = new ConcurrentHashMap<>();
 				handlerEntryContainersMap.put(type, objectEntriesMap);
 			}
 			
 			Queue<HandlerEntry> entries = objectEntriesMap.get(attentedObject);
 			if (entries == null)
 			{
-				entries = new ConcurrentLinkedQueue<HandlerEntry>();
+				entries = new ConcurrentLinkedQueue<>();
 				objectEntriesMap.put(attentedObject, entries);
 			}
 			
@@ -135,7 +124,7 @@ public class EventManagerRoot implements EventManager
 		if (throwableHandler == null) throwableHandler = DEFAULT_THROWABLE_HANDLER;
 		
 		Class<? extends Event> type = event.getClass();
-		PriorityQueue<HandlerEntry> handlerEntryQueue = new PriorityQueue<HandlerEntry>(16, HANDLER_ENTRY_PRIORITY_COMPARATOR);
+		PriorityQueue<HandlerEntry> handlerEntryQueue = new PriorityQueue<>(16, HANDLER_ENTRY_PRIORITY_COMPARATOR);
 		
 		Map<Object, Queue<HandlerEntry>> objectEntriesMap = handlerEntryContainersMap.get(type);
 		if (objectEntriesMap == null) return;
@@ -148,7 +137,7 @@ public class EventManagerRoot implements EventManager
 			Queue<HandlerEntry> entries = objectEntriesMap.get(object);
 			if (entries != null)
 			{
-				for (HandlerEntry entry : entries) handlerEntryQueue.add(entry);
+				handlerEntryQueue.addAll(entries.stream().collect(Collectors.toList()));
 			}
 			
 			Class<?>[] interfaces = cls.getInterfaces();
@@ -157,7 +146,7 @@ public class EventManagerRoot implements EventManager
 				Queue<HandlerEntry> classEntries = objectEntriesMap.get(clz);
 				if (classEntries != null)
 				{
-					for (HandlerEntry entry : classEntries) handlerEntryQueue.add(entry);
+					handlerEntryQueue.addAll(classEntries.stream().collect(Collectors.toList()));
 				}
 			}
 			
@@ -166,7 +155,7 @@ public class EventManagerRoot implements EventManager
 				Queue<HandlerEntry> classEntries = objectEntriesMap.get(clz);
 				if (classEntries != null)
 				{
-					for (HandlerEntry entry : classEntries) handlerEntryQueue.add(entry);
+					handlerEntryQueue.addAll(classEntries.stream().collect(Collectors.toList()));
 				}
 			}
 		}
@@ -174,10 +163,10 @@ public class EventManagerRoot implements EventManager
 		Queue<HandlerEntry> entries = objectEntriesMap.get(Object.class);
 		if (entries != null)
 		{
-			for (HandlerEntry entry : entries) handlerEntryQueue.add(entry);
+			handlerEntryQueue.addAll(entries.stream().collect(Collectors.toList()));
 		}
 		
-		while (handlerEntryQueue.isEmpty() == false && event.isInterrupted() == false)
+		while (!handlerEntryQueue.isEmpty() && !event.isInterrupted())
 		{
 			HandlerEntry entry = handlerEntryQueue.poll();
 			EventHandler<T> handler = (EventHandler<T>) entry.getHandler();

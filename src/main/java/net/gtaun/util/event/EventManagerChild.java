@@ -93,7 +93,7 @@ class EventManagerChild implements EventManagerNode
 	public void cancelAll()
 	{
 		List<HandlerEntry> entries = new ArrayList<>(handlerEntries);
-		for (HandlerEntry entry : entries) entry.cancel();
+		entries.forEach(net.gtaun.util.event.HandlerEntry::cancel);
 		handlerEntries.clear();
 	}
 	
@@ -106,11 +106,11 @@ class EventManagerChild implements EventManagerNode
 		}
 		
 		isDestroyed = true;
-		
-		for (EventManagerNode node : childs) node.destroy();
+
+		childs.forEach(net.gtaun.util.event.EventManagerNode::destroy);
 		childs.clear();
-		
-		for (HandlerEntry entry : handlerEntries) entry.cancel();
+
+		handlerEntries.forEach(net.gtaun.util.event.HandlerEntry::cancel);
 		handlerEntries.clear();
 	}
 	
