@@ -1,12 +1,12 @@
 /**
- * Copyright (C) 2011-2014 MK124
- *
+ * Copyright (C) 2012-2016 MK124
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package net.gtaun.util.event;
+package net.gtaun.util.event
 
 /**
- * Interface of event handler.
- * 
+ * Interface of interruptable event.
+ * If you wish your event could be interrupted, please implements this interface.
+
  * @author MK124
  */
-@FunctionalInterface
-public interface EventHandler<E extends Event>
-{
-	/**
-	 * Handle event.
-	 * 
-	 * @param event Instance of event.
-	 * @throws Throwable Exceptions that might be thrown.
-	 */
-	void handleEvent(E event) throws Throwable;
+interface Interruptable {
+    /**
+     * Dispatch the interrupt event.
+     */
+    fun interrupt()
 }
