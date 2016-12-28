@@ -6,6 +6,8 @@ class Attentions {
 
     val objects: MutableList<Any> = mutableListOf()
 
+    fun obj(target: Any) = `object`(target)
+
     fun `object`(target: Any): Attentions {
         objects.add(target)
         return this
